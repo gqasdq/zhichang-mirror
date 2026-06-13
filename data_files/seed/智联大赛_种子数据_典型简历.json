@@ -1,0 +1,127 @@
+{
+  "说明": "典型简历样本数据集 - 用于RAG简历分析训练与偏见检测示例",
+  "数据来源": ["Resume Genius公开模板", "各高校就业指导中心", "锤子简历等公开资源", "GitHub简历模板"],
+  "总数": 15,
+  "简历列表": [
+    {
+      "id": "resume_001",
+      "类型": "应届生-无经验",
+      "简历文本": "姓名：张三\n电话：138-xxxx-xxxx | 邮箱：zhangsan@email.com\n地址：上海\n求职意向：用户运营/市场助理\n\n教育背景\nXX大学 | 市场营销 | 本科 | 2022.09 – 2026.06\n- 主修课程：消费者行为学、数字营销、品牌管理、市场数据分析（GPA：3.7/4.0）\n- 校级优秀学生奖学金（前10%），2024、2025年\n\n实习经历\nABC科技有限公司 | 市场部实习生 | 2025.07 – 2025.10\n- 内容运营：独立负责公司官方社交媒体账号（粉丝5W+）的图文内容策划与撰写，期间平均互动率提升25%\n\n项目经历\n校园营销策划大赛 | 项目负责人 | 2025.03 – 2025.05\n- 带领5人团队策划执行校园营销活动，覆盖800+学生，获奖一等奖\n\n技能证书\n- 技能：PS基础、Excel数据处理、微信公众号运营\n- 证书：英语六级、市场营销师（初级）",
+      "亮点标注": "GPA优秀(3.7/4.0)、有量化的实习成果(互动率提升25%)、有团队领导经验(5人团队)",
+      "偏见点标注": "无正式工作经验，全靠实习和学生项目支撑；实习时间较短(3个月)",
+      "来源": "https://www.resumemakeroffer.com/blog/post/97837"
+    },
+    {
+      "id": "resume_002",
+      "类型": "转行者-销售转行政",
+      "简历文本": "姓名：张三\n电话：138-xxxx-xxxx | 邮箱：zhangsan@email.com\n求职意向：行政助理\n\n教育背景\nXX大学，市场营销专业，本科，2018-2022\n\n工作经历\n销售代表 | ABC公司（2022-2024）\n- 负责客户沟通与维护，提升客户满意度至95%，锻炼了出色的沟通和协调能力\n- 执行销售计划，按时完成月度目标，培养了高效执行力和时间管理能力\n- 处理订单和文档整理，确保数据准确，体现了细心和责任心\n\n自我评价\n具备良好的沟通和执行能力，细心负责，自学行政基础知识，能快速适应新环境，致力于为团队提供高效支持。",
+      "亮点标注": "有可量化的成绩(满意度95%)、可迁移技能明确(沟通、协调、细心)",
+      "偏见点标注": "完全转行缺乏行政经验、跨行业需要重新学习",
+      "来源": "https://www.100chui.com/article/487728.html"
+    },
+    {
+      "id": "resume_003",
+      "类型": "转行者-客服转会计",
+      "简历文本": "姓名：王五\n电话：137-xxxx-xxxx | 邮箱：wangwu@email.com\n求职意向：会计助理\n\n教育背景\nXX大学，经济学专业，本科，2017-2021\n\n工作经历\n客服专员 | GHI公司，2021-2024\n- 处理客户咨询和投诉，培养了耐心和细致的工作态度\n- 记录客户反馈数据，确保信息准确，锻炼了数据整理能力\n\n技能与证书\n- 自学会计基础知识，考取初级会计职称\n- 熟练使用Excel进行简单账务处理\n\n自我评价\n做事细心认真，对数字敏感，正在积极转型至会计领域。",
+      "亮点标注": "已考取初级会计职称、展现了学习意愿和主动性",
+      "偏见点标注": "原岗位与财务完全不相关、缺乏财务正式经验",
+      "来源": "https://www.100chui.com/article/487728.html"
+    },
+    {
+      "id": "resume_004",
+      "类型": "转行者-文员转新媒体运营",
+      "简历文本": "姓名：李四\n电话：139-xxxx-xxxx | 邮箱：lisi@email.com\n求职意向：新媒体运营专员\n\n教育背景\nXX学院，中文专业，大专，2019-2022\n\n工作经历\n办公室文员 | DEF公司，2022-2024\n- 负责公司文件整理和简单文案撰写，累计撰写通知、报告等文档50+篇，提升了文字表达能力\n- 协助组织内部活动，锻炼了策划和执行能力\n\n技能与证书\n- 自学新媒体运营课程，掌握基础内容策划和社交媒体管理\n- 关注行业账号，了解最新趋势\n\n自我评价\n热爱文字工作，学习能力强，积极关注新媒体动态，愿从基础做起，快速成长。",
+      "亮点标注": "文字能力强、有自媒体学习经历、对新领域有热情",
+      "偏见点标注": "学历一般(大专)、没有新媒体正式经验、自学成果可能不够系统",
+      "来源": "https://www.100chui.com/article/487728.html"
+    },
+    {
+      "id": "resume_005",
+      "类型": "Gap Year后求职",
+      "简历文本": "姓名：李明\n电话：139-xxxx-xxxx | 邮箱：liming@email.com\n求职意向：产品经理\n\n教育背景\nXX大学 | 计算机科学 | 本科 | 2019-2023\n\n职业空白\nGap Year - 2023.06 至 2024.06\n- 前往12个国家旅行，发展文化适应能力和全球视野\n- 完成数据分析在线课程，获得Python和SQL技能认证\n- 开发个人项目：健身记录App原型设计\n\n项目经历\n公司内部员工满意度提升项目 | 项目核心成员 | 2024.03 – 2024.06\n- 主导引入企业微信协作工具，编写使用指南\n- 员工对内部沟通效率满意度从6.5分提升至8.2分\n\n技能\n- 技能：Python、SQL、数据分析、Axure原型设计\n- 语言：英语CET-6",
+      "亮点标注": "Gap期间有明确目标和成果、项目经验可量化、技能提升具体",
+      "偏见点标注": "一年的职业空白可能引发疑问、需要解释Gap原因",
+      "来源": "https://ai.hrloo.com/article/311164"
+    },
+    {
+      "id": "resume_006",
+      "类型": "跨专业转行-行政转安全运维",
+      "简历文本": "姓名：陈强\n电话：138-xxxx-xxxx | 邮箱：chenqiang@email.com\n求职意向：安全运维工程师\n\n教育背景\nXX大学 | 信息管理与信息系统 | 本科 | 2018-2022\n\n工作经历\n行政专员 | XX公司（2022-2025）\n- 负责公司行政文件归档，制定分类规则，零差错\n\n项目经历\nCTF实践（2025.5）\n- 参与CTFhub基础赛，完成Web-SQL注入、Misc-流量分析2个专题共8道题\n\n自学成果（2025.2-2025.5）\n- 系统学习安全运维工具：用Nmap完成10台测试服务器的端口扫描\n- 用ELK分析日志，识别出3次异常登录事件\n\n技能\n- 工具：Nmap、Wireshark、ELK\n- 认证：正在备考CISP",
+      "亮点标注": "通过CTF和自学展示了学习能力和技术兴趣",
+      "偏见点标注": "无正式安全工作经验、与原行政岗位差距大",
+      "来源": "https://blog.csdn.net/weixin_46428928/article/details/153468558"
+    },
+    {
+      "id": "resume_007",
+      "类型": "转行者-教培转互联网运营",
+      "简历文本": "姓名：赵雪\n电话：139-xxxx-xxxx | 邮箱：zhaoxue@email.com\n求职意向：用户运营\n\n教育背景\nXX师范大学 | 英语教育 | 本科 | 2018-2022\n\n工作经历\n英语教师 | XX教育机构（2022-2024）\n- 负责500人线下高阶英语社群运营\n- 主导社群线上化迁移项目，用户留存率提升30%\n- 设计'老带新'打卡裂变活动，月均新增用户200+\n\n技能\n- 工具：企业微信、小程序后台、数据分析\n- 认证：互联网运营实战认证（2024）",
+      "亮点标注": "500人社群运营经验、成功的线上迁移项目、可量化的数据成果",
+      "偏见点标注": "原行业双减政策受影响、跨行业转型需要重新建立人脉",
+      "来源": "https://www.resumemakeroffer.com/blog/post/96185"
+    },
+    {
+      "id": "resume_008",
+      "类型": "转行者-机械转数据分析",
+      "简历文本": "姓名：刘洋\n电话：137-xxxx-xxxx | 邮箱：liuyang@email.com\n求职意向：数据分析师\n\n教育背景\nXX理工大学 | 机械设计 | 本科 | 2017-2021\n\n工作经历\n工艺工程师 | XX机械公司（2021-2024）\n- 负责生产线工艺优化，良率提升5%\n- 运用SPC进行质量控制\n\n项目经验\n生产线故障预警数据分析模型（个人项目）\n- 用Python处理传感器数据，进行特征工程\n- 训练分类模型预测设备故障风险\n\n技能\n- 分析工具：Python(Pandas, NumPy)、SQL、Tableau\n- 方法论：回归分析、假设检验、SPC",
+      "亮点标注": "有统计方法论基础、可迁移工程思维到数据分析",
+      "偏见点标注": "无正式数据分析工作经验、自学项目深度有限",
+      "来源": "https://www.resumemakeroffer.com/blog/post/103530"
+    },
+    {
+      "id": "resume_009",
+      "类型": "应届生-简历内容匹配度低",
+      "简历文本": "姓名：周杰\n电话：138-xxxx-xxxx | 邮箱：zhoujie@email.com\n求职意向：产品经理\n\n教育背景\nXX大学 | 工商管理 | 本科 | 2020-2024\n- GPA：3.2/4.0\n\n校园经历\n学生会副主席 | 2022-2023\n- 组织校园文化节，参与人数500+\n\n获得荣誉\n- 校级优秀学生干部\n- 三等奖学金",
+      "亮点标注": "有领导经验(学生会副主席)、有活动组织能力",
+      "偏见点标注": "简历内容与目标岗位匹配度极低、没有相关实习或项目经验、GPA一般",
+      "来源": "https://m.nowcoder.com/discuss/884751078204387328"
+    },
+    {
+      "id": "resume_010",
+      "类型": "高学历优化简历示例",
+      "简历文本": "姓名：林晓\n电话：139-xxxx-xxxx | 邮箱：linxiao@email.com\n求职意向：AI产品经理\n\n教育背景\nXX大学 | 计算机科学 | 硕士 | 2022-2024\n华东理工大学 | 对外汉语 | 本科 | 2018-2022\n\n实习经历\nXX科技公司 | 产品实习生 | 2023.07-2023.09\n- 独立完成AI对话产品用户调研报告，识别3个核心需求点\n- 协助产品需求文档撰写，对接研发团队\n\n项目经历\n校园AI助手开发 | 产品负责人 | 2023.03-2023.06\n- 主导产品规划，定义核心功能MVP\n- 用户测试收集反馈，迭代3个版本\n\n技能\n- 工具：Axure、XMind、SQL\n- AI工具：ChatGPT、Midjourney、文心一言",
+      "亮点标注": "双学位背景(技术+语言)、有AI产品相关实习、展现了AI工具使用能力",
+      "偏见点标注": "非CS背景可能被质疑技术能力、硕士时间较短",
+      "来源": "http://m.toutiao.com/group/7637432652606095918/"
+    },
+    {
+      "id": "resume_011",
+      "类型": "职场空窗期处理示例",
+      "简历文本": "姓名：吴婷\n电话：137-xxxx-xxxx | 邮箱：wuting@email.com\n求职意向：品牌经理\n\n教育背景\nXX大学 | 新闻传播 | 本科 | 2015-2019\n\n工作经历\n品牌专员 | XX公司 | 2019.06 – 2022.03\n- 负责品牌传播策略制定\n- 管理社交媒体矩阵，粉丝增长200%\n\n职业发展期 | 2022.03 – 2023.09\n- 专注自我提升，完成MBA核心课程学习\n- 考取PMP认证\n- 进行行业调研和职业探索\n\n技能\n- 工具：PS、Adobe Premiere、GA数据分析\n- 认证：PMP、CBA品牌策划师",
+      "亮点标注": "用'职业发展期'而非'失业'、有自我提升的具体成果",
+      "偏见点标注": "一年半的空窗期可能引发疑问、缺乏近期工作经历",
+      "来源": "https://www.gov.uk/government/publications/reduce-unconscious-bias-in-cv-screening/reduce-unconscious-bias-in-cv-screening"
+    },
+    {
+      "id": "resume_012",
+      "类型": "海外留学生求职",
+      "简历文本": "姓名：Ahmed\nPhone: +1-xxx-xxxx | Email: ahmed@email.com\nLinkedIn: linkedin.com/in/ahmedk\n\nEDUCATION\nKingston University, London, UK\nBA in Digital Media Technology | 2021-2025\nFirst Class Honours\n\nEXPERIENCE\nMarketing Intern | Local Startup | Summer 2024\n- Conducted market research across 5 competitor brands\n- Created social media content plan increasing engagement by 40%\n\nCampus Ambassador | Tech Company | 2023-2024\n- Organized tech workshops for 200+ students\n\nSKILLS\n- Digital Marketing, Social Media Analytics\n- Tools: Canva, Hootsuite, Google Analytics\n- Languages: English (Native), Arabic (Fluent), Mandarin (Basic)",
+      "亮点标注": "海外学历、一等荣誉、有国际视野和多语言能力",
+      "偏见点标注": "可能在本地化经验上不足、签证身份可能影响求职",
+      "来源": "https://nypost.com/2026/04/26/lifestyle/new-college-grad-exposes-horror-job-market-after-failing-to-get-a-job-offer-from-500-applications/"
+    },
+    {
+      "id": "resume_013",
+      "类型": "职业中期晋升型",
+      "简历文本": "姓名：王总监\n电话：139-xxxx-xxxx | 邮箱：wang@email.com\n求职意向：运营总监\n\n教育背景\nXX大学 | 工商管理 | EMBA | 2020-2022\nXX大学 | 市场营销 | 本科 | 2008-2012\n\n工作经历\n运营总监 | 互联网公司（2020-至今）\n- 负责用户增长策略，年用户规模从500万增长至2000万\n- 带领30人团队，年度OKR完成率95%\n- 搭建数据分析体系，支撑决策效率提升40%\n\n高级经理 | 传统企业（2016-2020）\n- 从0到1搭建数字化营销体系\n- 电商渠道年GMV突破1亿\n\n技能\n- 战略规划、团队管理、数据驱动运营\n- 认证：CFA Level II",
+      "亮点标注": "有完整的晋升路径、有可量化的业绩(用户增长、GMV)",
+      "偏见点标注": "可能薪资期望较高、传统行业背景可能不被互联网认可",
+      "来源": "https://www.ourskillstory.com/blog/how-to-write-career-change-resume"
+    },
+    {
+      "id": "resume_014",
+      "类型": "应届毕业生-海外就业",
+      "简历文本": "Noah Hernandez\nFront-End Developer\n123-456-7890 | noahhernandez@email.com\nlinkedin.com/in/noah.hernandez\n\nSUMMARY\nHighly adaptable, innovative Front-End Developer with over 5 years of experience in the tech industry. Eager to support CodeCraft Frontiers in building top-notch, user-focused software solutions using strong UX design knowledge. Achieved a 15% increase in website user engagement through design improvements at PixelPulse Studios.\n\nEXPERIENCE\nFront-End Developer\nPixelPulse Studios, Erie, PA\nJanuary 2018–Present\n- Leading the Front-End team in design and implementation of user-centric software solutions\n- Collaborating with Back-End team for seamless functionality\n- Conducting A/B testing for conversion optimization\n\nEDUCATION\nComputer Science, BS\nState University | 2014-2018\n\nSKILLS\n- Frontend: React, Vue, JavaScript, HTML/CSS\n- Tools: Git, Docker, Figma",
+      "亮点标注": "Professional summary精准匹配岗位、有量化成果(15%增长)、技术栈清晰",
+      "偏见点标注": "相对传统的简历格式、缺乏个人项目展示",
+      "来源": "https://zety.com/blog/perfect-resume"
+    },
+    {
+      "id": "resume_015",
+      "类型": "技能导向型简历(功能型)",
+      "简历文本": "姓名：陈敏\n电话：138-xxxx-xxxx | 邮箱：chenmin@email.com\n求职意向：项目管理\n\n核心技能\n- 项目管理：PMP认证，8年+经验，成功交付20+项目\n- 团队领导：管理50人以内团队，擅长跨部门协作\n- 敏捷实践：Scrum Master认证，推行敏捷转型\n\n项目经验\n（未按时间顺序，侧重技能匹配）\n\n大型系统迁移项目\n- 主导ERP系统从本地迁移至云端，耗时18个月\n- 协调8个部门，节省IT成本30%\n\n供应链优化项目\n- 引入自动化流程，订单处理时间缩短50%\n\n工作经历\n项目经理 | 多元集团（2018-至今）\n项目经理 | 初创公司（2015-2018）\n\n教育背景\nXX大学 | 工程管理 | 本科 | 2011-2015\n\n认证\nPMP、ACP-Scrumban、CISSP",
+      "亮点标注": "技能高度匹配目标岗位、用项目成果量化能力、不受工作经历顺序限制",
+      "偏见点标注": "功能型简历可能被某些HR认为回避工作经历、某些ATS系统可能难以解析",
+      "来源": "https://shipresume.com/help/common-doubts/explain-gap-year/"
+    }
+  ]
+}
