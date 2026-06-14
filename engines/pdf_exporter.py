@@ -1002,7 +1002,7 @@ body {{
                 )
             )
 
-        content_table = Table([[content_parts]], colWidths=[content_width])
+        content_table = Table([[content_parts]], colWidths=[content_width], splitByRow=True)
         content_table.setStyle(TableStyle([("LEFTPADDING", (0, 0), (-1, -1), 0)]))
 
         rail_table = Table([[""]], colWidths=[rail_width], rowHeights=[230 * mm])
@@ -1021,4 +1021,5 @@ body {{
 
         doc.build([shell])
         return buf.getvalue()
+
 
