@@ -1250,6 +1250,8 @@ def _render_resume_input_area() -> None:
             try:
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="pdfminer")
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
                 import pdfplumber
 
                 pdf_bytes = io.BytesIO(uploaded_file.read())
