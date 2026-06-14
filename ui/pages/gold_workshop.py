@@ -1253,6 +1253,8 @@ warnings.filterwarnings("ignore", category=UserWarning, module="pdfminer")
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
                 import pdfplumber
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
                 pdf_bytes = io.BytesIO(uploaded_file.read())
                 with pdfplumber.open(pdf_bytes) as pdf:
