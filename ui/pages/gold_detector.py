@@ -467,6 +467,8 @@ def _init_state() -> None:
         st.session_state.gold_flash_type = "info"
     if "gold_upload_name" not in st.session_state:
         st.session_state.gold_upload_name = None
+    if "gold_upload_fingerprint" not in st.session_state:
+        st.session_state.gold_upload_fingerprint = None
     if "gold_resume_input" not in st.session_state:
         st.session_state.gold_resume_input = st.session_state.gold_resume_text
     if "gold_jd_input" not in st.session_state:
@@ -1535,6 +1537,7 @@ def _handle_new_probe() -> None:
     st.session_state.gold_jd_text = ""
     st.session_state.gold_jd_list = [{"name": "岗位1", "content": ""}]
     st.session_state.gold_upload_name = None  # 重置上传文件标记
+    st.session_state.gold_upload_fingerprint = None
     st.session_state.gold_flash_message = None
     # 清空 uploader widget 状态，避免旧文件状态触发反复重跑
     if "resume_upload" in st.session_state:
@@ -1993,28 +1996,32 @@ def _render_input_area() -> None:
         type=["pdf"],
         key="resume_upload",
     )
-    if uploaded_file and st.session_state.gold_upload_name != uploaded_file.name:
-        with st.spinner("正在解析PDF..."):
-            try:
-                resume_text = extract_text_from_pdf_bytes(uploaded_file.getvalue())
-                if resume_text.strip():
-                    st.session_state.gold_upload_name = uploaded_file.name
-                    st.session_state.gold_resume_text = resume_text
-                    st.session_state.gold_resume_input = resume_text
-                    st.rerun()
-                else:
-                    st.warning("未能从 PDF 中提取文字，请换一份文件或直接粘贴简历内容。")
-            except ModuleNotFoundError:
-                st.error("PDF解析依赖未安装：请执行 `python -m pip install pypdf pdfplumber` 后重试。")
-            except Exception as exc:
-                st.error(f"PDF解析失败：{exc}")
+    if uploaded_file is not None:
+        fingerprint = f"{uploaded_file.name}:{uploaded_file.size}"
+        if st.session_state.gold_upload_fingerprint != fingerprint:
+            with st.spinner("正在解析PDF..."):
+                try:
+                    resume_text = extract_text_from_pdf_bytes(uploaded_file.getvalue())
+                    if resume_text.strip():
+                        st.session_state.gold_upload_fingerprint = fingerprint
+                        st.session_state.gold_upload_name = uploaded_file.name
+                        st.session_state.gold_resume_text = resume_text
+                        st.session_state.gold_resume_input = resume_text
+                    else:
+                        st.warning("未能从 PDF 中提取文字，请换一份文件或直接粘贴简历内容。")
+                except ModuleNotFoundError:
+                    st.error("PDF解析依赖未安装：请执行 `python -m pip install pypdf pdfplumber` 后重试。")
+                except Exception as exc:
+                    st.error(f"PDF解析失败：{exc}")
 
     resume = st.text_area(
         "简历内容",
+        value=st.session_state.gold_resume_text,
         placeholder="把你的简历粘贴到这里，或上传PDF文件...",
         height=250,
-        key="gold_resume_input",
     )
+    st.session_state.gold_resume_text = resume
+    st.session_state.gold_resume_input = resume
 
     st.markdown("### 📋 岗位描述（可添加多个对比）")
 
@@ -2049,7 +2056,6 @@ def _render_input_area() -> None:
             st.session_state.gold_jd_list.append({"name": f"岗位{idx}", "content": ""})
             st.rerun()
 
-    st.session_state.gold_resume_text = st.session_state.get("gold_resume_input", "")
     jd_text = st.session_state.gold_jd_list[0]["content"] if st.session_state.gold_jd_list else ""
     st.session_state.gold_jd_text = jd_text
 
@@ -2067,12 +2073,14 @@ def _render_input_area() -> None:
                 st.rerun()
     with col2:
         if st.button("清空"):
-            st.session_state.gold_resume_text = ""
             st.session_state.gold_jd_text = ""
             st.session_state.gold_jd_list = [{"name": "岗位1", "content": ""}]
             st.session_state.gold_upload_name = None
-            if "gold_resume_input" in st.session_state:
-                st.session_state.gold_resume_input = ""
+            st.session_state.gold_upload_fingerprint = None
+            st.session_state.gold_resume_text = ""
+            st.session_state.gold_resume_input = ""
+            if "resume_upload" in st.session_state:
+                st.session_state.resume_upload = None
             st.rerun()
 
 

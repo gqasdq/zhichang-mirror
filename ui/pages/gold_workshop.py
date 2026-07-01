@@ -664,6 +664,7 @@ def _init_state() -> None:
         "workshop_resume_input": "",
         "workshop_jd_input": "",
         "workshop_upload_name": None,
+        "workshop_upload_fingerprint": None,
         "workshop_basic_format_checked": False,
         "workshop_basic_format_issues": [],
         "workshop_basic_format_passes": [],
@@ -1245,30 +1246,34 @@ def _render_resume_input_area() -> None:
         type=["pdf"],
         key="workshop_resume_upload",
     )
-    if uploaded_file and st.session_state.get("workshop_upload_name") != uploaded_file.name:
-        with st.spinner("正在解析 PDF…"):
-            try:
-                from utils.pdf_text import extract_text_from_pdf_bytes
+    if uploaded_file is not None:
+        fingerprint = f"{uploaded_file.name}:{uploaded_file.size}"
+        if st.session_state.get("workshop_upload_fingerprint") != fingerprint:
+            with st.spinner("正在解析 PDF…"):
+                try:
+                    from utils.pdf_text import extract_text_from_pdf_bytes
 
-                resume_text = extract_text_from_pdf_bytes(uploaded_file.getvalue())
-                if resume_text.strip():
-                    st.session_state.workshop_upload_name = uploaded_file.name
-                    st.session_state.workshop_resume_input = resume_text
-                    st.session_state.workshop_resume_text = resume_text.strip()
-                    st.rerun()
-                else:
-                    st.warning("未能从 PDF 中提取文字，请换一份文件或直接粘贴简历内容。")
-            except ModuleNotFoundError:
-                st.error("PDF 解析依赖未安装：请执行 `python -m pip install pypdf pdfplumber` 后重试。")
-            except Exception as exc:
-                st.error(f"PDF 解析失败：{exc}")
+                    resume_text = extract_text_from_pdf_bytes(uploaded_file.getvalue())
+                    if resume_text.strip():
+                        st.session_state.workshop_upload_fingerprint = fingerprint
+                        st.session_state.workshop_upload_name = uploaded_file.name
+                        st.session_state.workshop_resume_text = resume_text.strip()
+                        st.session_state.workshop_resume_input = resume_text
+                    else:
+                        st.warning("未能从 PDF 中提取文字，请换一份文件或直接粘贴简历内容。")
+                except ModuleNotFoundError:
+                    st.error("PDF 解析依赖未安装：请执行 `python -m pip install pypdf pdfplumber` 后重试。")
+                except Exception as exc:
+                    st.error(f"PDF 解析失败：{exc}")
 
     resume = st.text_area(
         "简历内容",
+        value=st.session_state.get("workshop_resume_text", ""),
         placeholder="把你的简历粘贴到这里，或上传 PDF 文件…",
         height=250,
-        key="workshop_resume_input",
     )
+    st.session_state.workshop_resume_text = resume.strip()
+    st.session_state.workshop_resume_input = resume
     jd = st.text_area(
         "岗位描述（可选，填写后 AI 优化会嵌入 JD 关键词）",
         placeholder="把目标岗位的 JD 粘贴到这里…",
