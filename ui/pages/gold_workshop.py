@@ -1,4 +1,4 @@
-﻿"""閲戝瓙宸ュ潑 鈥?绠€鍘嗗湪绾跨紪杈戝櫒銆?""
+"""金子工坊 — 简历在线编辑器。"""
 
 from __future__ import annotations
 
@@ -29,39 +29,39 @@ from utils.emotion_adapter import EmotionAdapter, normalize_emotion_state
 logger = logging.getLogger(__name__)
 
 SECTION_ORDER = [
-    ("basic_info", "鍩烘湰淇℃伅", "馃搵"),
-    ("objective", "姹傝亴鎰忓悜", "馃幆"),
-    ("education", "鏁欒偛鑳屾櫙", "馃帗"),
-    ("work_exp", "宸ヤ綔缁忓巻", "馃捈"),
-    ("project_exp", "椤圭洰缁忓巻", "馃敡"),
-    ("skills", "涓撲笟鎶€鑳?, "鈿?),
-    ("self_eval", "鑷垜璇勪环", "馃挰"),
+    ("basic_info", "基本信息", "📋"),
+    ("objective", "求职意向", "🎯"),
+    ("education", "教育背景", "🎓"),
+    ("work_exp", "工作经历", "💼"),
+    ("project_exp", "项目经历", "🔧"),
+    ("skills", "专业技能", "⚡"),
+    ("self_eval", "自我评价", "💬"),
 ]
 
 SECTION_OPTIMIZE_TYPES: dict[str, list[str]] = {
-    "basic_info": ["鏍煎紡瑙勮寖"],
-    "objective": ["鎺緸浼樺寲", "JD鍖归厤"],
-    "education": ["鐩稿叧璇剧▼琛ュ厖"],
-    "work_exp": ["STAR鏀瑰啓", "閲忓寲琛ュ厖", "鍏抽敭璇嶅祵鍏?, "鍘诲彛璇寲"],
-    "project_exp": ["STAR鏀瑰啓", "閲忓寲琛ュ厖", "鎶€鏈爤绐佸嚭"],
-    "skills": ["鍒嗙被鏁寸悊", "JD瀵规瘮琛ュ叏"],
-    "self_eval": ["鍘荤┖璇濆璇?, "鏁版嵁鏀拺"],
+    "basic_info": ["格式规范"],
+    "objective": ["措辞优化", "JD匹配"],
+    "education": ["相关课程补充"],
+    "work_exp": ["STAR改写", "量化补充", "关键词嵌入", "去口语化"],
+    "project_exp": ["STAR改写", "量化补充", "技术栈突出"],
+    "skills": ["分类整理", "JD对比补全"],
+    "self_eval": ["去空话套话", "数据支撑"],
 }
 
 SECTION_NAME_MAP = {key: name for key, name, _ in SECTION_ORDER}
 
 EMPTY_SECTION_GUIDES: dict[str, dict[str, str]] = {
     "objective": {
-        "title": "馃摥 褰撳墠绠€鍘嗕腑娌℃湁姹傝亴鎰忓悜銆?,
-        "body": "姹傝亴鎰忓悜鑳藉府 HR 蹇€熷垽鏂綘鍜屽矖浣嶇殑鍖归厤搴︼紝寤鸿琛ュ厖銆?,
-        "hint": "鏍煎紡鍙傝€冿細鎰忓悜宀椾綅锛歑XX | 鏈熸湜鍩庡競锛歑XX | 鍒板矖鏃堕棿锛歑XX",
-        "btn": "鉁忥笍 娣诲姞姹傝亴鎰忓悜",
+        "title": "📭 当前简历中没有求职意向。",
+        "body": "求职意向能帮 HR 快速判断你和岗位的匹配度，建议补充。",
+        "hint": "格式参考：意向岗位：XXX | 期望城市：XXX | 到岗时间：XXX",
+        "btn": "✏️ 添加求职意向",
     },
     "self_eval": {
-        "title": "馃摥 褰撳墠绠€鍘嗕腑娌℃湁鑷垜璇勪环銆?,
-        "body": "绠€鐭湁鍔涚殑鑷垜璇勪环鍙互绐佸嚭浣犵殑鏍稿績浼樺娍锛堝彲閫夋澘鍧楋級銆?,
-        "hint": "鏍煎紡鍙傝€冿細3 鍙ヨ瘽姒傛嫭鏍稿績鑳藉姏 + 涓庡矖浣嶇殑鍖归厤鐐?,
-        "btn": "鉁忥笍 娣诲姞鑷垜璇勪环",
+        "title": "📭 当前简历中没有自我评价。",
+        "body": "简短有力的自我评价可以突出你的核心优势（可选板块）。",
+        "hint": "格式参考：3 句话概括核心能力 + 与岗位的匹配点",
+        "btn": "✏️ 添加自我评价",
     },
 }
 
@@ -403,7 +403,7 @@ def _inject_styles() -> None:
     line-height: 1.6;
 }
 
-/* 鈹€鈹€ 閲戝瓙宸ュ潑瑙嗚绮句慨锛堜粎鏍峰紡锛屼笉鏀归€昏緫锛?鈹€鈹€ */
+/* ── 金子工坊视觉精修（仅样式，不改逻辑） ── */
 .ws-diff-panel {
     border-radius: 14px;
     border: 1px solid rgba(61, 56, 51, 0.08);
@@ -656,7 +656,7 @@ def _init_state() -> None:
         "workshop_section_status": {},
         "workshop_optimized": {},
         "workshop_adopted": {},
-        "workshop_emotion_state": "骞崇ǔ",
+        "workshop_emotion_state": "平稳",
         "workshop_manual_editing": None,
         "workshop_optimize_error": None,
         "workshop_changes": {},
@@ -688,7 +688,7 @@ def _init_state() -> None:
 
 
 def _sync_emotion_state() -> None:
-    """浠庢儏缁€ユ晳绔欏悓姝ユ儏缁姸鎬侊紝璇讳笉鍒板垯淇濇寔骞崇ǔ銆?""
+    """从情绪急救站同步情绪状态，读不到则保持平稳。"""
     raw = st.session_state.get("emotion_state")
     if raw:
         st.session_state.workshop_emotion_state = normalize_emotion_state(raw)
@@ -698,7 +698,7 @@ def _sync_emotion_state() -> None:
 
 
 def _resolve_emotion_state() -> str:
-    """瑙ｆ瀽褰撳墠搴斾娇鐢ㄧ殑鍥涚鎯呯华鐘舵€佷箣涓€銆?""
+    """解析当前应使用的四种情绪状态之一。"""
     raw = st.session_state.get("emotion_state") or st.session_state.get("workshop_emotion_state")
     if raw:
         return normalize_emotion_state(raw)
@@ -721,7 +721,7 @@ def _get_emotion_adapter() -> EmotionAdapter:
 
 
 def _get_nav_section_order() -> list[tuple[str, str, str]]:
-    """鎸触/杩疯尗鏃惰皟鏁村鑸『搴忥紝鍏朵綑淇濇寔榛樿銆?""
+    """挫败/迷茫时调整导航顺序，其余保持默认。"""
     default_keys = [key for key, _, _ in SECTION_ORDER]
     sections = st.session_state.get("workshop_sections") or {}
     adapter = _get_emotion_adapter()
@@ -740,7 +740,7 @@ def _emotion_from_score() -> str:
 
 
 def _extract_scores_from_session() -> dict[str, float | int] | None:
-    """浠庨噾瀛愭帰娴嬪櫒浼犲叆鐨?match/quality 鏁版嵁鎻愬彇鍒嗘暟锛岄伩鍏嶉噸澶?AI 璋冪敤銆?""
+    """从金子探测器传入的 match/quality 数据提取分数，避免重复 AI 调用。"""
     match = st.session_state.get("workshop_match_data")
     if isinstance(match, dict) and match.get("overall_score") is not None:
         return {
@@ -761,7 +761,7 @@ def _extract_scores_from_session() -> dict[str, float | int] | None:
 
 
 def _score_resume_with_scorer(resume_text: str, *, show_thinking: bool = True) -> dict[str, float | int]:
-    """璇勫垎锛涢粯璁ゅ甫鎬濊€冮摼锛堜粎棣栨鍔犺浇锛夈€備紭鍖栧悗鍒锋柊搴旇蛋澧為噺浼扮畻銆?""
+    """评分；默认带思考链（仅首次加载）。优化后刷新应走增量估算。"""
     from engines.resume_quality_scorer import ResumeQualityScorer
 
     def _evaluate_only() -> dict[str, float | int]:
@@ -810,12 +810,12 @@ def _score_resume_with_scorer(resume_text: str, *, show_thinking: bool = True) -
     return run_with_thinking_chain(
         RESUME_ANALYSIS_STEPS,
         _work,
-        model_name="DeepSeek V3 路 鍒嗘瀽鎺ㄧ悊",
+        model_name="DeepSeek V3 · 分析推理",
     )
 
 
 def _apply_adopt_score_delta(section_key: str) -> None:
-    """閲囩撼 AI 浼樺寲鍚庡嵆鏃舵洿鏂板浘琛ㄥ垎鏁帮紝涓嶈Е鍙戞暣浠界畝鍘嗛噸璇勩€?""
+    """采纳 AI 优化后即时更新图表分数，不触发整份简历重评。"""
     from components.workshop_score_delta import apply_optimization_delta
 
     before = st.session_state.get("workshop_before_scores")
@@ -832,7 +832,7 @@ def _apply_adopt_score_delta(section_key: str) -> None:
 
 
 def _ensure_before_scores() -> None:
-    """棣栨鍔犺浇鏃跺瓨鍌ㄤ紭鍖栧墠鍒嗘暟锛屽彧瀛樹竴娆°€?""
+    """首次加载时存储优化前分数，只存一次。"""
     if st.session_state.get("workshop_before_scores"):
         return
     cached = _extract_scores_from_session()
@@ -920,12 +920,12 @@ def _ensure_sections_parsed() -> None:
 
         parsed = run_with_thinking_chain(
             [
-                {"title": "璇嗗埆鏉垮潡鏍囬", "desc": "瀹氫綅鏁欒偛銆佺粡鍘嗐€佹妧鑳界瓑鍒嗗尯"},
-                {"title": "鎷嗗垎鏉垮潡鍐呭", "desc": "灏嗗叏鏂囩粨鏋勫寲鍒板悇鏉垮潡"},
-                {"title": "鏍￠獙瀹屾暣鎬?, "desc": "纭繚鍏抽敭鏉垮潡涓嶉仐婕?},
+                {"title": "识别板块标题", "desc": "定位教育、经历、技能等分区"},
+                {"title": "拆分板块内容", "desc": "将全文结构化到各板块"},
+                {"title": "校验完整性", "desc": "确保关键板块不遗漏"},
             ],
             _parse,
-            model_name="DeepSeek V3 路 鍒嗘瀽鎺ㄧ悊",
+            model_name="DeepSeek V3 · 分析推理",
         )
         sections = parsed.sections
         if sections_look_monolithic(sections):
@@ -945,7 +945,7 @@ def _ensure_sections_parsed() -> None:
 
 
 def _post_parse_normalize() -> None:
-    """瑙ｆ瀽鍚庡厹搴曪細纭繚鑷冲皯鏈変竴涓澘鍧楁湁鍐呭锛屽苟鑷姩瀹氫綅鍒伴涓潪绌烘澘鍧椼€?""
+    """解析后兜底：确保至少有一个板块有内容，并自动定位到首个非空板块。"""
     from engines.resume_parser import heuristic_split_resume, sections_look_monolithic
 
     sections = st.session_state.get("workshop_sections") or {}
@@ -1024,26 +1024,26 @@ def _optimized_count() -> int:
 
 def _format_star_tags(text: str) -> str:
     escaped = html.escape(text)
-    escaped = escaped.replace("銆怱銆?, '<span class="workshop-star-tag-S">銆怱銆?/span>')
-    escaped = escaped.replace("銆怲銆?, '<span class="workshop-star-tag-T">銆怲銆?/span>')
-    escaped = escaped.replace("銆怉銆?, '<span class="workshop-star-tag-A">銆怉銆?/span>')
-    escaped = escaped.replace("銆怰銆?, '<span class="workshop-star-tag-R">銆怰銆?/span>')
+    escaped = escaped.replace("【S】", '<span class="workshop-star-tag-S">【S】</span>')
+    escaped = escaped.replace("【T】", '<span class="workshop-star-tag-T">【T】</span>')
+    escaped = escaped.replace("【A】", '<span class="workshop-star-tag-A">【A】</span>')
+    escaped = escaped.replace("【R】", '<span class="workshop-star-tag-R">【R】</span>')
     return escaped.replace("\n", "<br>")
 
 
 def render_optimized_content(content: str) -> str:
-    """娓叉煋浼樺寲鐗堝唴瀹癸紝鈿狅笍鏍囪杞负閱掔洰鏍囩銆?""
+    """渲染优化版内容，⚠️标记转为醒目标签。"""
     escaped = _format_star_tags(content)
     escaped = re.sub(
-        r"(\d+(?:\.\d+)?%?)鈿狅笍",
-        r'\1 <span class="ai-estimate-badge">闇€纭</span>',
+        r"(\d+(?:\.\d+)?%?)⚠️",
+        r'\1 <span class="ai-estimate-badge">需确认</span>',
         escaped,
     )
     return escaped
 
 
 def compute_diff_lines(original: str, optimized: str) -> list[dict]:
-    """鎸夎瀵规瘮锛岃繑鍥炴瘡琛岀殑鐘舵€併€?""
+    """按行对比，返回每行的状态。"""
     orig_lines = original.splitlines()
     opt_lines = optimized.splitlines()
     matcher = difflib.SequenceMatcher(None, orig_lines, opt_lines)
@@ -1069,7 +1069,7 @@ def compute_diff_lines(original: str, optimized: str) -> list[dict]:
 
 
 def _render_original_diff_html(original: str, optimized: str) -> str:
-    """宸︿晶鍘熸枃锛氬垹闄?鏇挎崲琛岀孩鑹叉贰鍑恒€?""
+    """左侧原文：删除/替换行红色淡出。"""
     orig_lines = original.splitlines()
     opt_lines = optimized.splitlines()
     matcher = difflib.SequenceMatcher(None, orig_lines, opt_lines)
@@ -1087,11 +1087,11 @@ def _render_original_diff_html(original: str, optimized: str) -> str:
                     f'<div class="ws-diff-line ws-diff-line--removed">{html.escape(orig_lines[i])}</div>'
                 )
 
-    return "".join(parts) if parts else '<span class="workshop-empty-hint">锛堟殏鏃犲唴瀹癸級</span>'
+    return "".join(parts) if parts else '<span class="workshop-empty-hint">（暂无内容）</span>'
 
 
 def _render_optimized_diff_html(original: str, optimized: str) -> str:
-    """鍙充晶浼樺寲鐗堬細鏂板/淇敼琛岄粍鑹查珮浜€?""
+    """右侧优化版：新增/修改行黄色高亮。"""
     orig_lines = original.splitlines()
     opt_lines = optimized.splitlines()
     matcher = difflib.SequenceMatcher(None, orig_lines, opt_lines)
@@ -1114,11 +1114,11 @@ def _render_optimized_diff_html(original: str, optimized: str) -> str:
                     f'<div class="ws-diff-line ws-diff-line--added">{render_optimized_content(opt_lines[j])}</div>'
                 )
 
-    return "".join(parts) if parts else '<span class="workshop-empty-hint">锛堟殏鏃犱紭鍖栫粨鏋滐級</span>'
+    return "".join(parts) if parts else '<span class="workshop-empty-hint">（暂无优化结果）</span>'
 
 
 def _build_change_summary(changes: list[dict]) -> str:
-    """浠?changes 鍒楄〃缁熻鏀瑰姩鎽樿銆?""
+    """从 changes 列表统计改动摘要。"""
     counter: Counter[str] = Counter()
     for change in changes:
         if isinstance(change, dict):
@@ -1127,19 +1127,19 @@ def _build_change_summary(changes: list[dict]) -> str:
                 counter[change_type] += 1
     if not counter:
         return ""
-    parts = [f"{count}澶剓change_type}" for change_type, count in counter.items()]
-    return " 路 ".join(parts)
+    parts = [f"{count}处{change_type}" for change_type, count in counter.items()]
+    return " · ".join(parts)
 
 
 def _apply_estimate_confirmations(section_key: str, content: str) -> str:
-    """灏嗗凡纭鐨勪及绠楁暟鎹浛鎹㈣繘姝ｆ枃銆?""
+    """将已确认的估算数据替换进正文。"""
     confirmed_map = st.session_state.get(f"{section_key}_estimates") or {}
     if not confirmed_map:
         return content
 
     result_parts: list[str] = []
     last = 0
-    for idx, match in enumerate(re.finditer(r"(\d+(?:\.\d+)?%?)鈿狅笍", content)):
+    for idx, match in enumerate(re.finditer(r"(\d+(?:\.\d+)?%?)⚠️", content)):
         result_parts.append(content[last:match.start()])
         if idx in confirmed_map and str(confirmed_map[idx]).strip():
             result_parts.append(str(confirmed_map[idx]).strip())
@@ -1151,7 +1151,7 @@ def _apply_estimate_confirmations(section_key: str, content: str) -> str:
 
 
 def _get_estimate_confirmations() -> dict[str, dict[int, str]]:
-    """鏀堕泦鍚勬澘鍧楀凡纭鐨勪及绠楁暟鎹€?""
+    """收集各板块已确认的估算数据。"""
     confirmations: dict[str, dict[int, str]] = {}
     for key, _, _ in SECTION_ORDER:
         estimates = st.session_state.get(f"{key}_estimates")
@@ -1161,20 +1161,20 @@ def _get_estimate_confirmations() -> dict[str, dict[int, str]]:
 
 
 def _get_unconfirmed_estimates(sections: dict[str, str]) -> list[str]:
-    """鑾峰彇鏈‘璁ょ殑浼扮畻鏁板€煎垪琛ㄣ€?""
+    """获取未确认的估算数值列表。"""
     return _find_unconfirmed_estimates(sections, _get_estimate_confirmations())
 
 
 def _render_estimate_confirmation(section_key: str, content: str) -> None:
-    """娓叉煋鈿狅笍浼扮畻鏁版嵁鐨勭‘璁ゅ尯銆?""
-    estimates = re.findall(r"(\d+(?:\.\d+)?%?)鈿狅笍", content)
+    """渲染⚠️估算数据的确认区。"""
+    estimates = re.findall(r"(\d+(?:\.\d+)?%?)⚠️", content)
     if not estimates:
         return
 
-    st.markdown("#### 馃搵 纭AI浼扮畻鏁版嵁")
+    st.markdown("#### 📋 确认AI估算数据")
     st.markdown(
         '<div style="color:#8C8279; font-size:12px; margin-bottom:8px;">'
-        "浠ヤ笅鏁版嵁鐢盇I鍩轰簬涓婁笅鏂囦及绠楋紝璇风‘璁ゆ垨淇敼涓哄疄闄呮暟鍊?
+        "以下数据由AI基于上下文估算，请确认或修改为实际数值"
         "</div>",
         unsafe_allow_html=True,
     )
@@ -1186,32 +1186,32 @@ def _render_estimate_confirmation(section_key: str, content: str) -> None:
     for i, estimate in enumerate(estimates):
         col_label, col_input, col_check = st.columns([2, 2, 1])
         with col_label:
-            st.markdown(f"馃搳 `{estimate}`锛圓I浼扮畻锛?)
+            st.markdown(f"📊 `{estimate}`（AI估算）")
         with col_input:
             default_val = st.session_state[state_key].get(i, estimate)
             new_val = st.text_input(
-                "瀹為檯鏁板€?,
+                "实际数值",
                 value=str(default_val),
                 key=f"est_{section_key}_{i}",
                 label_visibility="collapsed",
-                placeholder="杈撳叆瀹為檯鏁板瓧",
+                placeholder="输入实际数字",
             )
         with col_check:
-            confirmed = st.checkbox("鉁?, key=f"est_confirm_{section_key}_{i}")
+            confirmed = st.checkbox("✓", key=f"est_confirm_{section_key}_{i}")
             if confirmed and new_val.strip():
                 st.session_state[state_key][i] = new_val.strip()
 
     confirmed_map = st.session_state.get(state_key) or {}
     if len(confirmed_map) == len(estimates) and all(confirmed_map.get(i) for i in range(len(estimates))):
-        st.success("鉁?鎵€鏈変及绠楁暟鎹凡纭")
+        st.success("✅ 所有估算数据已确认")
 
 
 def _render_header() -> None:
-    render_page_header("閲戝瓙宸ュ潑", "鍦ㄦ祻瑙堝櫒閲岄€愭鎵撶（绠€鍘嗭紝AI 浼樺寲缁撴灉宸﹀彸瀵规瘮锛岄€愭潯閲囩撼")
+    render_page_header("金子工坊", "在浏览器里逐段打磨简历，AI 优化结果左右对比，逐条采纳")
 
 
 def _reset_workshop_content_state() -> None:
-    """鏇存崲绠€鍘嗘椂閲嶇疆瑙ｆ瀽涓庝紭鍖栫姸鎬併€?""
+    """更换简历时重置解析与优化状态。"""
     st.session_state.workshop_sections = {}
     st.session_state.workshop_sections_parsed = False
     st.session_state.workshop_section_status = {}
@@ -1230,31 +1230,25 @@ def _reset_workshop_content_state() -> None:
 
 
 def _render_resume_input_area() -> None:
-    """涓庨噾瀛愭帰娴嬪櫒涓€鑷寸殑绠€鍘嗘坊鍔犲尯锛氫笂浼?PDF 鑷姩濉叆锛屾垨鎵嬪姩绮樿创銆?""
+    """与金子探测器一致的简历添加区：上传 PDF 自动填入，或手动粘贴。"""
     st.markdown('<div class="workshop-entry-box">', unsafe_allow_html=True)
     st.markdown(
         '<div class="workshop-entry-hint">'
-        "涓婁紶 PDF 鎴栫矘璐寸畝鍘嗗叏鏂囷紝鐐瑰嚮銆屾坊鍔犵畝鍘嗗苟寮€濮嬭В鏋愩€嶅悗鑷姩鎷嗗垎涓哄悇鏉垮潡銆?
-        "涔熷彲浠庨噾瀛愭帰娴嬪櫒璇勫垎鍚庝竴閿甫鍏ャ€?
+        "上传 PDF 或粘贴简历全文，点击「添加简历并开始解析」后自动拆分为各板块。"
+        "也可从金子探测器评分后一键带入。"
         "</div>",
         unsafe_allow_html=True,
     )
 
     uploaded_file = st.file_uploader(
-        "涓婁紶绠€鍘嗭紙鏀寔 PDF锛?,
+        "上传简历（支持 PDF）",
         type=["pdf"],
         key="workshop_resume_upload",
     )
     if uploaded_file and st.session_state.get("workshop_upload_name") != uploaded_file.name:
-        with st.spinner("姝ｅ湪瑙ｆ瀽 PDF鈥?):
+        with st.spinner("正在解析 PDF…"):
             try:
-import warnings
-warnings.filterwarnings("ignore", category=UserWarning, module="pdfminer")
-import warnings
-warnings.filterwarnings("ignore", category=UserWarning)
                 import pdfplumber
-import warnings
-warnings.filterwarnings("ignore", category=UserWarning)
 
                 pdf_bytes = io.BytesIO(uploaded_file.read())
                 with pdfplumber.open(pdf_bytes) as pdf:
@@ -1263,35 +1257,35 @@ warnings.filterwarnings("ignore", category=UserWarning)
                 st.session_state.workshop_resume_input = resume_text
                 st.session_state.workshop_resume_text = resume_text.strip()
             except ModuleNotFoundError:
-                st.error("PDF 瑙ｆ瀽渚濊禆鏈畨瑁咃細璇锋墽琛?`python -m pip install pdfplumber` 鍚庨噸璇曘€?)
+                st.error("PDF 解析依赖未安装：请执行 `python -m pip install pdfplumber` 后重试。")
             except Exception as exc:
-                st.error(f"PDF 瑙ｆ瀽澶辫触锛歿exc}")
+                st.error(f"PDF 解析失败：{exc}")
 
     resume = st.text_area(
-        "绠€鍘嗗唴瀹?,
-        placeholder="鎶婁綘鐨勭畝鍘嗙矘璐村埌杩欓噷锛屾垨涓婁紶 PDF 鏂囦欢鈥?,
+        "简历内容",
+        placeholder="把你的简历粘贴到这里，或上传 PDF 文件…",
         height=250,
         key="workshop_resume_input",
     )
     jd = st.text_area(
-        "宀椾綅鎻忚堪锛堝彲閫夛紝濉啓鍚?AI 浼樺寲浼氬祵鍏?JD 鍏抽敭璇嶏級",
-        placeholder="鎶婄洰鏍囧矖浣嶇殑 JD 绮樿创鍒拌繖閲屸€?,
+        "岗位描述（可选，填写后 AI 优化会嵌入 JD 关键词）",
+        placeholder="把目标岗位的 JD 粘贴到这里…",
         height=120,
         key="workshop_jd_input",
     )
 
     col_add, col_clear = st.columns([1, 1])
     with col_add:
-        if st.button("娣诲姞绠€鍘嗗苟寮€濮嬭В鏋?, type="primary", use_container_width=True, key="workshop_start_parse"):
+        if st.button("添加简历并开始解析", type="primary", use_container_width=True, key="workshop_start_parse"):
             if not resume.strip():
-                st.warning("璇峰厛杈撳叆鎴栦笂浼犵畝鍘?)
+                st.warning("请先输入或上传简历")
             else:
                 st.session_state.workshop_resume_text = resume.strip()
                 st.session_state.workshop_jd_text = jd.strip()
                 _reset_workshop_content_state()
                 st.rerun()
     with col_clear:
-        if st.button("娓呯┖", use_container_width=True, key="workshop_clear_resume"):
+        if st.button("清空", use_container_width=True, key="workshop_clear_resume"):
             st.session_state.workshop_resume_text = ""
             st.session_state.workshop_jd_text = ""
             st.session_state.workshop_upload_name = None
@@ -1304,12 +1298,12 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 
 def _render_empty_state() -> None:
-    st.info("杩樻病鏈夌畝鍘嗗唴瀹广€傝娣诲姞绠€鍘嗭紝鎴栦粠閲戝瓙鎺㈡祴鍣ㄥ畬鎴愯瘎鍒嗗悗鐐瑰嚮銆岃繘鍏ラ噾瀛愬伐鍧娿€嶃€?)
+    st.info("还没有简历内容。请添加简历，或从金子探测器完成评分后点击「进入金子工坊」。")
     _render_resume_input_area()
 
 
 def _render_content_display(content: str) -> None:
-    """鐢?HTML 灞曠ず鏉垮潡姝ｆ枃锛堥伩鍏?text_area 鐨?key 缂撳瓨绌哄€奸棶棰橈級銆?""
+    """用 HTML 展示板块正文（避免 text_area 的 key 缓存空值问题）。"""
     if not content.strip():
         return
     st.markdown(
@@ -1321,7 +1315,7 @@ def _render_content_display(content: str) -> None:
 def _render_section_nav() -> None:
     current = st.session_state.get("workshop_current_section", "basic_info")
     st.markdown('<div class="ws-nav-shell">', unsafe_allow_html=True)
-    st.markdown('<div class="ws-nav-title">鏉垮潡瀵艰埅</div>', unsafe_allow_html=True)
+    st.markdown('<div class="ws-nav-title">板块导航</div>', unsafe_allow_html=True)
 
     for key, name, icon in _get_nav_section_order():
         label = f"{icon}  {name}"
@@ -1340,14 +1334,14 @@ def _render_section_nav() -> None:
     pct = int(done / total * 100) if total else 0
     st.markdown(
         f"""
-<div class="workshop-progress-label">鈹€鈹€ {done}/{total} 鈹€鈹€</div>
+<div class="workshop-progress-label">── {done}/{total} ──</div>
 <div class="workshop-progress-bar">
   <div class="workshop-progress-fill" style="width:{pct}%;"></div>
 </div>
 """,
         unsafe_allow_html=True,
     )
-    if st.button("馃搫 瀵煎嚭PDF", key="nav_export", use_container_width=True):
+    if st.button("📄 导出PDF", key="nav_export", use_container_width=True):
         st.session_state.workshop_show_export_check = True
         st.session_state.workshop_pdf_bytes = None
         st.rerun()
@@ -1355,14 +1349,14 @@ def _render_section_nav() -> None:
 
 
 def _check_anxiety_pace(section_key: str) -> None:
-    """鐒﹁檻鏃舵彁绀哄厛鐪嬪綋鍓嶆澘鍧楋紝涓嶇‖闃绘柇鍚庣画浼樺寲銆?""
+    """焦虑时提示先看当前板块，不硬阻断后续优化。"""
     adapter = _get_emotion_adapter()
     if not adapter.should_limit_optimization():
         return
     status_map = st.session_state.get("workshop_section_status") or {}
     optimizing = [k for k, v in status_map.items() if v == "optimizing"]
     if optimizing and section_key not in optimizing:
-        st.warning("馃挋 鍏堢湅瀹屽綋鍓嶈繖涓澘鍧楃殑浼樺寲寤鸿锛屼笉鎬ャ€傞噰绾虫垨淇濇寔鍘熸枃鍚庡啀浼樺寲涓嬩竴涓€?)
+        st.warning("💙 先看完当前这个板块的优化建议，不急。采纳或保持原文后再优化下一个。")
 
 
 def _run_optimize(section_key: str) -> None:
@@ -1385,7 +1379,7 @@ def _run_optimize(section_key: str) -> None:
             jd=jd,
             emotion_state=emotion,
         ),
-        model_name="DeepSeek V3 路 鍒嗘瀽鎺ㄧ悊",
+        model_name="DeepSeek V3 · 分析推理",
     )
 
     if not result.success:
@@ -1412,62 +1406,62 @@ def _render_compare_view(section_key: str, section_name: str, icon: str) -> None
     if layout == "guided":
         adapter.render_guided_steps(
             [
-                "鈶?鍏堢湅 AI 浼樺寲鐗堢殑鏍稿績鏀瑰姩",
-                "鈶?瑙夊緱濂界殑鐐广€岄噰绾炽€嶏紝涓嶅枩娆㈢殑淇濇寔鍘熸枃",
-                "鈶?涓€娆″彧澶勭悊涓€涓澘鍧楀氨濂?,
+                "① 先看 AI 优化版的核心改动",
+                "② 觉得好的点「采纳」，不喜欢的保持原文",
+                "③ 一次只处理一个板块就好",
             ],
-            title="璺熺潃杩欎笁姝ヨ蛋",
+            title="跟着这三步走",
         )
     elif layout == "single_column":
         st.markdown(
             '<div class="step-guide" style="font-size:13px; color:#6B5B52; margin-bottom:12px;">'
-            "馃挕 涓€娆＄湅涓€涓澘鍧楀氨濂斤紝涓嶆€ャ€傜偣宸︿晶鏉垮潡鍚嶉€愪釜鏌ョ湅銆?/div>",
+            "💡 一次看一个板块就好，不急。点左侧板块名逐个查看。</div>",
             unsafe_allow_html=True,
         )
 
     summary = _build_change_summary(changes)
     if summary and layout != "single_column":
         st.markdown(
-            f'<div class="ws-diff-summary">鏈浼樺寲锛歿html.escape(summary)}</div>',
+            f'<div class="ws-diff-summary">本次优化：{html.escape(summary)}</div>',
             unsafe_allow_html=True,
         )
 
     if layout == "praise_first" and changes:
-        st.markdown("**馃尡 鍏堢湅鐪嬪仛寰楀ソ鐨?*")
+        st.markdown("**🌱 先看看做得好的**")
         for change in changes[:3]:
             if not isinstance(change, dict):
                 continue
             optimized_snip = str(change.get("optimized", "")).strip()
             if optimized_snip:
                 st.markdown(f'<div class="highlight-done" style="padding:8px 12px; margin-bottom:6px;">'
-                            f"鉁?{html.escape(optimized_snip)}</div>", unsafe_allow_html=True)
+                            f"✅ {html.escape(optimized_snip)}</div>", unsafe_allow_html=True)
 
     if layout == "single_column":
         body = _render_optimized_diff_html(original, optimized) if optimized else (
-            '<span class="workshop-empty-hint">锛堟殏鏃犱紭鍖栫粨鏋滐級</span>'
+            '<span class="workshop-empty-hint">（暂无优化结果）</span>'
         )
         st.markdown(
             f"""
 <div class="ws-diff-panel ws-diff-panel--ai breathe-card">
-  <div class="ws-diff-panel-head">AI 浼樺寲寤鸿</div>
+  <div class="ws-diff-panel-head">AI 优化建议</div>
   <div class="ws-diff-panel-body workshop-diff-optimized">{body}</div>
 </div>
 """,
             unsafe_allow_html=True,
         )
         if original.strip():
-            with st.expander("鏌ョ湅鍘熸枃锛堝彲閫夛級"):
+            with st.expander("查看原文（可选）"):
                 _render_content_display(original)
     else:
         col_left, col_right = st.columns(2, gap="medium")
         with col_left:
             body = _render_original_diff_html(original, optimized) if original else (
-                '<span class="workshop-empty-hint">锛堟殏鏃犲唴瀹癸級</span>'
+                '<span class="workshop-empty-hint">（暂无内容）</span>'
             )
             st.markdown(
                 f"""
 <div class="ws-diff-panel ws-diff-panel--original">
-  <div class="ws-diff-panel-head">鍘熸枃</div>
+  <div class="ws-diff-panel-head">原文</div>
   <div class="ws-diff-panel-body workshop-diff-original">{body}</div>
 </div>
 """,
@@ -1475,7 +1469,7 @@ def _render_compare_view(section_key: str, section_name: str, icon: str) -> None
             )
         with col_right:
             body = _render_optimized_diff_html(original, optimized) if optimized else (
-                '<span class="workshop-empty-hint">锛堟殏鏃犱紭鍖栫粨鏋滐級</span>'
+                '<span class="workshop-empty-hint">（暂无优化结果）</span>'
             )
             panel_class = "ws-diff-panel ws-diff-panel--ai"
             if layout == "praise_first":
@@ -1483,7 +1477,7 @@ def _render_compare_view(section_key: str, section_name: str, icon: str) -> None
             st.markdown(
                 f"""
 <div class="{panel_class}">
-  <div class="ws-diff-panel-head">AI 浼樺寲鐗?/div>
+  <div class="ws-diff-panel-head">AI 优化版</div>
   <div class="ws-diff-panel-body workshop-diff-optimized">{body}</div>
 </div>
 """,
@@ -1494,34 +1488,34 @@ def _render_compare_view(section_key: str, section_name: str, icon: str) -> None
         _render_estimate_confirmation(section_key, optimized)
 
     if changes:
-        with st.expander("馃搵 鏌ョ湅姣忔潯鏀瑰姩璇︽儏"):
+        with st.expander("📋 查看每条改动详情"):
             type_icons = {
-                "STAR琛ュ叏": "馃煛",
-                "閲忓寲鏀瑰啓": "馃煚",
-                "鍏抽敭璇嶅祵鍏?: "馃數",
-                "鍘诲彛璇寲": "馃煝",
-                "閫昏緫閲嶇粍": "馃煟",
+                "STAR补全": "🟡",
+                "量化改写": "🟠",
+                "关键词嵌入": "🔵",
+                "去口语化": "🟢",
+                "逻辑重组": "🟣",
             }
             for change in changes:
                 if not isinstance(change, dict):
                     continue
                 col_type, col_detail = st.columns([1, 3])
                 change_type = str(change.get("type", ""))
-                icon_mark = type_icons.get(change_type, "鈿?)
+                icon_mark = type_icons.get(change_type, "⚪")
                 with col_type:
                     st.markdown(f"{icon_mark} **{change_type}**")
                 with col_detail:
                     original_snip = str(change.get("original", ""))
                     optimized_snip = str(change.get("optimized", ""))
                     st.markdown(f"~~{original_snip}~~")
-                    st.markdown(f"鈫?**{optimized_snip}**")
+                    st.markdown(f"→ **{optimized_snip}**")
                     reason = str(change.get("reason", "")).strip()
                     if reason:
                         st.caption(reason)
 
     col_a, col_b, col_c = st.columns(3)
     with col_a:
-        if st.button("鉁?閲囩撼 AI 浼樺寲", key=f"workshop_adopt_{section_key}", use_container_width=True):
+        if st.button("✅ 采纳 AI 优化", key=f"workshop_adopt_{section_key}", use_container_width=True):
             _set_section_content(section_key, optimized)
             adopted = st.session_state.get("workshop_adopted") or {}
             already_optimized = adopted.get(section_key) == "optimized"
@@ -1533,14 +1527,14 @@ def _render_compare_view(section_key: str, section_name: str, icon: str) -> None
             st.session_state.workshop_manual_editing = None
             if not already_optimized:
                 _apply_adopt_score_delta(section_key)
-            st.success(f"{section_name} 宸查噰绾?AI 浼樺寲")
+            st.success(f"{section_name} 已采纳 AI 优化")
             st.rerun()
     with col_b:
-        if st.button("鉁忥笍 鎵嬪姩缂栬緫", key=f"workshop_manual_{section_key}", use_container_width=True):
+        if st.button("✏️ 手动编辑", key=f"workshop_manual_{section_key}", use_container_width=True):
             st.session_state.workshop_manual_editing = section_key
             st.rerun()
     with col_c:
-        if st.button("鉂?淇濇寔鍘熸枃", key=f"workshop_reject_{section_key}", use_container_width=True):
+        if st.button("❌ 保持原文", key=f"workshop_reject_{section_key}", use_container_width=True):
             adopted = st.session_state.get("workshop_adopted") or {}
             adopted[section_key] = "original"
             st.session_state.workshop_adopted = adopted
@@ -1557,11 +1551,11 @@ def _render_manual_edit(section_key: str, section_name: str, icon: str) -> None:
     default = optimized or current
 
     st.markdown(
-        f'<div class="workshop-editor-title">{icon} {html.escape(section_name)} 路 鎵嬪姩缂栬緫</div>',
+        f'<div class="workshop-editor-title">{icon} {html.escape(section_name)} · 手动编辑</div>',
         unsafe_allow_html=True,
     )
     edited = st.text_area(
-        "缂栬緫鍐呭",
+        "编辑内容",
         value=default,
         height=280,
         key=f"workshop_manual_area_{section_key}",
@@ -1569,7 +1563,7 @@ def _render_manual_edit(section_key: str, section_name: str, icon: str) -> None:
     )
     col_save, col_cancel = st.columns(2)
     with col_save:
-        if st.button("淇濆瓨淇敼", type="primary", key=f"workshop_save_manual_{section_key}", use_container_width=True):
+        if st.button("保存修改", type="primary", key=f"workshop_save_manual_{section_key}", use_container_width=True):
             _set_section_content(section_key, edited.strip())
             adopted = st.session_state.get("workshop_adopted") or {}
             adopted[section_key] = "manual"
@@ -1580,10 +1574,10 @@ def _render_manual_edit(section_key: str, section_name: str, icon: str) -> None:
             st.session_state.workshop_manual_editing = None
             if section_key == "basic_info":
                 st.session_state.workshop_basic_format_checked = False
-            st.success("宸蹭繚瀛樻墜鍔ㄤ慨鏀?)
+            st.success("已保存手动修改")
             st.rerun()
     with col_cancel:
-        if st.button("鍙栨秷", key=f"workshop_cancel_manual_{section_key}", use_container_width=True):
+        if st.button("取消", key=f"workshop_cancel_manual_{section_key}", use_container_width=True):
             st.session_state.workshop_manual_editing = None
             st.rerun()
 
@@ -1611,15 +1605,15 @@ def _render_basic_info_format_results() -> None:
     issues = st.session_state.get("workshop_basic_format_issues") or []
     passes = st.session_state.get("workshop_basic_format_passes") or []
     st.markdown('<div class="ws-format-result">', unsafe_allow_html=True)
-    st.markdown('<div class="ws-format-result-title">鏍煎紡妫€鏌ョ粨鏋?/div>', unsafe_allow_html=True)
+    st.markdown('<div class="ws-format-result-title">格式检查结果</div>', unsafe_allow_html=True)
     for item in passes:
         st.markdown(
-            f'<div class="ws-format-line ws-format-line--pass">鉁?{html.escape(item.get("message", ""))}</div>',
+            f'<div class="ws-format-line ws-format-line--pass">✅ {html.escape(item.get("message", ""))}</div>',
             unsafe_allow_html=True,
         )
     for item in issues:
         status = item.get("status", "warning")
-        icon_mark = "鉂? if status == "error" else "鈿狅笍"
+        icon_mark = "❌" if status == "error" else "⚠️"
         line_class = "ws-format-line--error" if status == "error" else "ws-format-line--warn"
         st.markdown(
             f'<div class="ws-format-line {line_class}">{icon_mark} {html.escape(item.get("message", ""))}</div>',
@@ -1627,11 +1621,11 @@ def _render_basic_info_format_results() -> None:
         )
     if not issues:
         st.markdown(
-            '<div class="ws-format-line ws-format-line--pass">鉁?鍩烘湰淇℃伅鏃犻棶棰橈紝涓嶉渶瑕佷紭鍖?/div>',
+            '<div class="ws-format-line ws-format-line--pass">✅ 基本信息无问题，不需要优化</div>',
             unsafe_allow_html=True,
         )
     st.markdown("</div>", unsafe_allow_html=True)
-    st.info(f"馃挕 {format_check_summary(issues, passes)}")
+    st.info(f"💡 {format_check_summary(issues, passes)}")
 
 
 def _render_original_view(section_key: str, section_name: str, icon: str, content: str) -> None:
@@ -1644,12 +1638,12 @@ def _render_original_view(section_key: str, section_name: str, icon: str, conten
     else:
         others = [n for k, n, _ in SECTION_ORDER if k != section_key and _section_char_count(k) > 0]
         if others:
-            st.info(f"銆寋section_name}銆嶆殏鏃犺瘑鍒唴瀹癸紝璇风偣宸︿晶鏌ョ湅锛歿'銆?.join(others)}銆?)
+            st.info(f"「{section_name}」暂无识别内容，请点左侧查看：{'、'.join(others)}。")
         else:
-            st.warning("鏈兘璇嗗埆璇ユ澘鍧楀唴瀹癸紝鍙偣鍑汇€屾墜鍔ㄧ紪杈戙€嶈嚜琛岃ˉ鍏呫€?)
+            st.warning("未能识别该板块内容，可点击「手动编辑」自行补充。")
 
     if section_key != "basic_info" and content.strip():
-        if st.button("鉁忥笍 鎵嬪姩缂栬緫", key=f"workshop_edit_plain_{section_key}", use_container_width=False):
+        if st.button("✏️ 手动编辑", key=f"workshop_edit_plain_{section_key}", use_container_width=False):
             st.session_state.workshop_manual_editing = section_key
             st.rerun()
 
@@ -1662,12 +1656,12 @@ def _render_adopted_view(section_key: str, section_name: str, icon: str, content
             unsafe_allow_html=True,
         )
         st.markdown(
-            f'<div class="workshop-meta-row">{len(content.strip())} 瀛?/div>',
+            f'<div class="workshop-meta-row">{len(content.strip())} 字</div>',
             unsafe_allow_html=True,
         )
-    st.success("鉁?宸蹭紭鍖?)
+    st.success("✅ 已优化")
     _render_content_display(content)
-    if st.button("鉁忥笍 鎵嬪姩缂栬緫", key=f"workshop_edit_done_{section_key}"):
+    if st.button("✏️ 手动编辑", key=f"workshop_edit_done_{section_key}"):
         st.session_state.workshop_manual_editing = section_key
         st.rerun()
 
@@ -1681,15 +1675,15 @@ def _render_editor() -> None:
     ) == "original":
         adapter.render_guided_steps(
             [
-                "鈶?鍏堢湅鐪嬩綘鐨勭畝鍘嗘暣浣撹瘎鍒嗭紙閲戝瓙鎺㈡祴鍣級",
-                "鈶?鐐瑰紑姣忎釜鏉垮潡鐪嬬湅 AI 鐨勫缓璁?,
-                "鈶?瑙夊緱濂界殑鐐广€岄噰绾炽€嶏紝涓嶅枩娆㈢殑璺宠繃灏卞ソ",
+                "① 先看看你的简历整体评分（金子探测器）",
+                "② 点开每个板块看看 AI 的建议",
+                "③ 觉得好的点「采纳」，不喜欢的跳过就好",
             ],
         )
 
     pace_hint = adapter.get_pace_hint()
     if pace_hint:
-        st.info(f"馃挋 {pace_hint}")
+        st.info(f"💙 {pace_hint}")
 
     jd_prompt = adapter.get_jd_prompt()
     if jd_prompt and not (st.session_state.get("workshop_jd_text") or "").strip():
@@ -1697,7 +1691,7 @@ def _render_editor() -> None:
 
     section_key = st.session_state.get("workshop_current_section", "basic_info")
     section_name = SECTION_NAME_MAP.get(section_key, section_key)
-    icon = next((ic for k, _, ic in SECTION_ORDER if k == section_key), "馃搫")
+    icon = next((ic for k, _, ic in SECTION_ORDER if k == section_key), "📄")
     content = _get_section_content(section_key)
 
     error_msg = st.session_state.get("workshop_optimize_error")
@@ -1707,7 +1701,7 @@ def _render_editor() -> None:
 
     jd = (st.session_state.get("workshop_jd_text") or "").strip()
     if jd:
-        st.caption(f"馃搸 宸插叧鑱?JD 路 {len(jd)} 瀛?路 鎯呯华锛歿_emotion_from_score()}")
+        st.caption(f"📎 已关联 JD · {len(jd)} 字 · 情绪：{_emotion_from_score()}")
 
     status_map = st.session_state.get("workshop_section_status") or {}
     section_status = status_map.get(section_key, "original")
@@ -1721,11 +1715,11 @@ def _render_editor() -> None:
         if section_status == "optimizing":
             st.markdown(
                 f'<div class="workshop-editor-title">{icon} {html.escape(section_name)}'
-                f'<span class="ws-compare-badge">AI 瀵规瘮</span></div>',
+                f'<span class="ws-compare-badge">AI 对比</span></div>',
                 unsafe_allow_html=True,
             )
             st.markdown(
-                '<div class="workshop-meta-row">宸︿晶涓哄師鏂囷紝鍙充晶楂樹寒涓?AI 鏀瑰姩 路 纭鍚庤閫夋嫨閲囩撼鎴栦繚鎸佸師鏂?/div>',
+                '<div class="workshop-meta-row">左侧为原文，右侧高亮为 AI 改动 · 确认后请选择采纳或保持原文</div>',
                 unsafe_allow_html=True,
             )
             _render_compare_view(section_key, section_name, icon)
@@ -1735,7 +1729,7 @@ def _render_editor() -> None:
             _render_adopted_view(section_key, section_name, icon, content)
             return
 
-        # 榛樿锛氬師鏂?+ 鎿嶄綔鎸夐挳
+        # 默认：原文 + 操作按钮
         if section_key == "basic_info":
             title_col, action_col = st.columns([5, 1])
             with title_col:
@@ -1745,12 +1739,12 @@ def _render_editor() -> None:
                 )
                 char_count = len(content.strip())
                 st.markdown(
-                    f'<div class="workshop-meta-row">{char_count} 瀛?/div>' if char_count else '<div class="workshop-meta-row">鏆傛棤鍐呭</div>',
+                    f'<div class="workshop-meta-row">{char_count} 字</div>' if char_count else '<div class="workshop-meta-row">暂无内容</div>',
                     unsafe_allow_html=True,
                 )
             with action_col:
                 if content.strip() and st.button(
-                    "鏍煎紡妫€鏌?馃攳",
+                    "格式检查 🔍",
                     key="workshop_format_check",
                     use_container_width=True,
                     type="primary",
@@ -1764,12 +1758,12 @@ def _render_editor() -> None:
                 _render_content_display(content)
                 if st.session_state.get("workshop_basic_format_checked"):
                     _render_basic_info_format_results()
-                if st.button("鉁忥笍 鎵嬪姩缂栬緫", key="workshop_edit_basic_inline"):
+                if st.button("✏️ 手动编辑", key="workshop_edit_basic_inline"):
                     st.session_state.workshop_manual_editing = section_key
                     st.rerun()
             else:
-                st.warning("鍩烘湰淇℃伅涓虹┖锛岃鐐瑰嚮鎵嬪姩缂栬緫琛ュ厖銆?)
-                if st.button("鉁忥笍 鎵嬪姩缂栬緫", key="workshop_edit_basic_empty"):
+                st.warning("基本信息为空，请点击手动编辑补充。")
+                if st.button("✏️ 手动编辑", key="workshop_edit_basic_empty"):
                     st.session_state.workshop_manual_editing = section_key
                     st.rerun()
         else:
@@ -1781,12 +1775,12 @@ def _render_editor() -> None:
                 )
                 char_count = len(content.strip())
                 st.markdown(
-                    f'<div class="workshop-meta-row">{char_count} 瀛?/div>' if char_count else '<div class="workshop-meta-row">鏆傛棤鍐呭</div>',
+                    f'<div class="workshop-meta-row">{char_count} 字</div>' if char_count else '<div class="workshop-meta-row">暂无内容</div>',
                     unsafe_allow_html=True,
                 )
             with btn_col:
                 if _supports_ai_optimize(section_key, content):
-                    if st.button("AI 浼樺寲 鉁?, key=f"workshop_optimize_{section_key}", use_container_width=True, type="primary"):
+                    if st.button("AI 优化 ✨", key=f"workshop_optimize_{section_key}", use_container_width=True, type="primary"):
                         _check_anxiety_pace(section_key)
                         _run_optimize(section_key)
                         st.rerun()
@@ -1794,7 +1788,7 @@ def _render_editor() -> None:
 
 
 def _build_raw_final_sections() -> dict[str, str]:
-    """鍚堝苟鍚勬澘鍧楁渶缁堝唴瀹癸紙鏈簲鐢ㄤ及绠楃‘璁わ級銆?""
+    """合并各板块最终内容（未应用估算确认）。"""
     sections = st.session_state.get("workshop_sections") or {}
     adopted_map = st.session_state.get("workshop_adopted") or {}
     optimized_map = st.session_state.get("workshop_optimized") or {}
@@ -1809,7 +1803,7 @@ def _build_raw_final_sections() -> dict[str, str]:
 
 
 def _build_final_sections() -> dict[str, str]:
-    """鍚堝苟鍚勬澘鍧楁渶缁堝唴瀹癸紝骞跺簲鐢ㄥ凡纭鐨勪及绠楁暟鎹€?""
+    """合并各板块最终内容，并应用已确认的估算数据。"""
     final = _build_raw_final_sections()
     for key in final:
         final[key] = _apply_estimate_confirmations(key, final[key])
@@ -1817,14 +1811,14 @@ def _build_final_sections() -> dict[str, str]:
 
 
 def _render_template_selector() -> str:
-    """娓叉煋 PDF 妯℃澘閫夋嫨鍗＄墖锛岃繑鍥炲綋鍓嶉€変腑妯℃澘銆?""
+    """渲染 PDF 模板选择卡片，返回当前选中模板。"""
     selected = st.session_state.get("workshop_pdf_template", "classic")
-    st.markdown("#### 馃搫 閫夋嫨绠€鍘嗘ā鏉?)
+    st.markdown("#### 📄 选择简历模板")
 
     templates = [
-        ("classic", "馃搫", "缁忓吀鍟嗗姟", "鍥戒紒 路 閾惰 路 浣撳埗鍐?),
-        ("modern", "馃搵", "鐜颁唬绠€绾?, "浜掕仈缃?路 绉戞妧"),
-        ("ats", "馃摑", "ATS鍙嬪ソ", "绯荤粺绛涢€?路 绾枃鏈?),
+        ("classic", "📄", "经典商务", "国企 · 银行 · 体制内"),
+        ("modern", "📋", "现代简约", "互联网 · 科技"),
+        ("ats", "📝", "ATS友好", "系统筛选 · 纯文本"),
     ]
     cols = st.columns(3)
     for col, (tpl_id, emoji, title, desc) in zip(cols, templates):
@@ -1841,7 +1835,7 @@ def _render_template_selector() -> str:
 """,
                 unsafe_allow_html=True,
             )
-            if st.button("閫夋嫨", key=f"tpl_{tpl_id}", use_container_width=True):
+            if st.button("选择", key=f"tpl_{tpl_id}", use_container_width=True):
                 st.session_state.workshop_pdf_template = tpl_id
                 st.rerun()
 
@@ -1849,7 +1843,7 @@ def _render_template_selector() -> str:
 
 
 def _mark_resume_exported(template: str) -> None:
-    """鎸佷箙鍖栧鍑烘爣璁帮紝渚涙眰鑱岃繘搴︾湅鏉挎娴嬨€?""
+    """持久化导出标记，供求职进度看板检测。"""
     path = SessionManager.user_file_path("workshop", "exported.json")
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
@@ -1874,13 +1868,13 @@ def _render_export_check() -> None:
     unconfirmed = _get_unconfirmed_estimates(raw_sections)
 
     st.markdown('<div class="ws-export-check">', unsafe_allow_html=True)
-    st.markdown('<div class="ws-export-check-title">馃搵 瀵煎嚭鍓嶆鏌?/div>', unsafe_allow_html=True)
+    st.markdown('<div class="ws-export-check-title">📋 导出前检查</div>', unsafe_allow_html=True)
 
-    icon_map = {"pass": "鉁?, "warn": "鈿狅笍", "info": "鈩癸笍"}
+    icon_map = {"pass": "✅", "warn": "⚠️", "info": "ℹ️"}
     for check in checks:
-        icon = icon_map.get(str(check.get("status", "pass")), "鉁?)
+        icon = icon_map.get(str(check.get("status", "pass")), "✅")
         detail = check.get("detail") or ""
-        detail_text = f" 鈥?{detail}" if detail else ""
+        detail_text = f" — {detail}" if detail else ""
         line_class = ""
         status = check.get("status")
         if status == "warn":
@@ -1898,28 +1892,28 @@ def _render_export_check() -> None:
         preview = ", ".join(unconfirmed[:3])
         suffix = "..." if len(unconfirmed) > 3 else ""
         st.warning(
-            f"鈿狅笍 AI浼扮畻鏁版嵁纭 鈥?鏈墈len(unconfirmed)}澶凙I浼扮畻鏁版嵁鏈‘璁わ細{preview}{suffix}\n\n"
-            "寤鸿纭鍚庡啀瀵煎嚭锛屾湭纭鐨勬暟鎹湪PDF涓細鏄剧ず铏氱嚎涓嬪垝绾挎爣璁般€?
+            f"⚠️ AI估算数据确认 — 有{len(unconfirmed)}处AI估算数据未确认：{preview}{suffix}\n\n"
+            "建议确认后再导出，未确认的数据在PDF中会显示虚线下划线标记。"
         )
 
     selected_template = _render_template_selector()
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("浠嶇劧瀵煎嚭", type="primary", use_container_width=True, key="workshop_export_confirm"):
-            with st.spinner("姝ｅ湪鐢熸垚PDF..."):
+        if st.button("仍然导出", type="primary", use_container_width=True, key="workshop_export_confirm"):
+            with st.spinner("正在生成PDF..."):
                 try:
                     pdf_bytes = PDFExporter().export(sections, template=selected_template)
                     st.session_state.workshop_pdf_bytes = pdf_bytes
                     st.session_state.workshop_show_export_check = False
                     _mark_resume_exported(selected_template)
-                    st.success("PDF 宸茬敓鎴愶紝璇风偣鍑讳笅鏂逛笅杞姐€?)
+                    st.success("PDF 已生成，请点击下方下载。")
                 except Exception as exc:
                     logger.exception("[gold_workshop] PDF export failed: %s", exc)
-                    st.error(f"PDF 鐢熸垚澶辫触锛歿exc}")
+                    st.error(f"PDF 生成失败：{exc}")
             st.rerun()
     with col2:
-        if st.button("杩斿洖缁х画浼樺寲", use_container_width=True, key="workshop_export_cancel"):
+        if st.button("返回继续优化", use_container_width=True, key="workshop_export_cancel"):
             st.session_state.workshop_show_export_check = False
             st.session_state.workshop_pdf_bytes = None
             st.rerun()
@@ -1932,7 +1926,7 @@ def _render_export_footer() -> None:
     st.markdown('<div class="ws-export-footer">', unsafe_allow_html=True)
     col_spacer, col_export = st.columns([3, 1])
     with col_export:
-        if st.button("馃搫 瀵煎嚭PDF", type="primary", use_container_width=True, key="workshop_export_pdf"):
+        if st.button("📄 导出PDF", type="primary", use_container_width=True, key="workshop_export_pdf"):
             st.session_state.workshop_show_export_check = True
             st.session_state.workshop_pdf_bytes = None
             st.rerun()
@@ -1940,9 +1934,9 @@ def _render_export_footer() -> None:
 
     pdf_bytes = st.session_state.get("workshop_pdf_bytes")
     if pdf_bytes:
-        file_name = f"绠€鍘哶{datetime.now().strftime('%Y%m%d')}.pdf"
+        file_name = f"简历_{datetime.now().strftime('%Y%m%d')}.pdf"
         st.download_button(
-            label="猬囷笍 涓嬭浇PDF",
+            label="⬇️ 下载PDF",
             data=pdf_bytes,
             file_name=file_name,
             mime="application/pdf",
@@ -1952,7 +1946,7 @@ def _render_export_footer() -> None:
 
 
 def render() -> None:
-    track_module_enter("閲戝瓙宸ュ潑")
+    track_module_enter("金子工坊")
     _inject_styles()
     _init_state()
     _consume_section_query()
@@ -1965,7 +1959,7 @@ def render() -> None:
         return
 
     if st.session_state.get("workshop_fast_entry"):
-        st.caption("宸蹭粠閲戝瓙鎺㈡祴鍣ㄥ甫鍏ョ畝鍘嗕笌璇勫垎锛屾鍦ㄥ揩閫熷姞杞解€?)
+        st.caption("已从金子探测器带入简历与评分，正在快速加载…")
 
     _ensure_sections_parsed()
     _ensure_before_scores()
@@ -1983,7 +1977,5 @@ def render() -> None:
 
 
 if __name__ == "__main__":
-    st.set_page_config(page_title="閲戝瓙宸ュ潑", page_icon="馃敤", layout="wide")
+    st.set_page_config(page_title="金子工坊", page_icon="🔨", layout="wide")
     render()
-
-

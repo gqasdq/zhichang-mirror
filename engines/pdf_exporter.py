@@ -1,6 +1,9 @@
-﻿"""绠€鍘?PDF 瀵煎嚭 鈥?缁忓吀 / 鐜颁唬 / ATS 涓夋ā鏉匡紙WeasyPrint + ReportLab 闄嶇骇锛夈€?
-璁捐鏄犲皠锛? skill 缁煎悎锛夛細
-- classic  鈫?Notion 缂栬緫椋庯細鏆栫伆搴曟爮銆佺帿鐟拌楗版潯銆佸眳涓紶缁熸帓鐗?- modern   鈫?Vercel 绉戞妧椋庯細宸︿晶娓愬彉绔栨潯銆佸乏瀵归綈銆佸ぇ鍐欑珷鑺傛爣绛?- ats      鈫?Ollama 鏂囨。椋庯細绾粦鐧姐€佹柟鎷彿绔犺妭鏍囩銆佹棤瑁呴グ
+"""简历 PDF 导出 — 经典 / 现代 / ATS 三模板（WeasyPrint + ReportLab 降级）。
+
+设计映射（4 skill 综合）：
+- classic  → Notion 编辑风：暖灰底栏、玫瑰装饰条、居中传统排版
+- modern   → Vercel 科技风：左侧渐变竖条、左对齐、大写章节标签
+- ats      → Ollama 文档风：纯黑白、方括号章节标签、无装饰
 """
 
 from __future__ import annotations
@@ -16,12 +19,12 @@ logger = logging.getLogger(__name__)
 
 SECTION_TITLES: dict[str, str | None] = {
     "basic_info": None,
-    "objective": "姹傝亴鎰忓悜",
-    "education": "鏁欒偛鑳屾櫙",
-    "work_exp": "宸ヤ綔缁忓巻",
-    "project_exp": "椤圭洰缁忓巻",
-    "skills": "涓撲笟鎶€鑳?,
-    "self_eval": "鑷垜璇勪环",
+    "objective": "求职意向",
+    "education": "教育背景",
+    "work_exp": "工作经历",
+    "project_exp": "项目经历",
+    "skills": "专业技能",
+    "self_eval": "自我评价",
 }
 
 SECTION_ORDER_KEYS = (
@@ -34,7 +37,7 @@ SECTION_ORDER_KEYS = (
     "self_eval",
 )
 
-_ESTIMATE_PATTERN = re.compile(r"(\d+(?:\.\d+)?%?)鈿狅笍")
+_ESTIMATE_PATTERN = re.compile(r"(\d+(?:\.\d+)?%?)⚠️")
 
 _FONT_CANDIDATES = [
     "C:/Windows/Fonts/msyh.ttc",
@@ -45,7 +48,7 @@ _FONT_CANDIDATES = [
     "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
 ]
 
-# --- 妯℃澘璁捐浠ょ墝 -----------------------------------------------------------
+# --- 模板设计令牌 -----------------------------------------------------------
 
 CLASSIC_THEME = {
     "name": "#5C3D2E",
@@ -83,7 +86,7 @@ def _find_unconfirmed_estimates(
     sections: dict[str, str],
     estimate_confirmations: dict[str, dict[int, str]] | None = None,
 ) -> list[str]:
-    """缁熻鏈‘璁ょ殑 AI 浼扮畻鏁版嵁銆?""
+    """统计未确认的 AI 估算数据。"""
     confirmations = estimate_confirmations or {}
     unconfirmed: list[str] = []
     for section_key, content in sections.items():
@@ -101,7 +104,7 @@ def pre_export_check(
     section_status: dict[str, str],
     estimate_confirmations: dict[str, dict[int, str]] | None = None,
 ) -> list[dict[str, Any]]:
-    """瀵煎嚭鍓嶈嚜鍔ㄦ鏌ワ紝杩斿洖妫€鏌ラ」鍒楄〃銆?""
+    """导出前自动检查，返回检查项列表。"""
     checks: list[dict[str, Any]] = []
     basic = sections.get("basic_info", "") or ""
 
@@ -114,13 +117,13 @@ def pre_export_check(
         contact_status = "warn"
         missing: list[str] = []
         if not has_phone:
-            missing.append("鎵嬫満鍙?)
+            missing.append("手机号")
         if not has_email:
-            missing.append("閭")
-        contact_detail = "缂哄皯" + "銆?.join(missing)
+            missing.append("邮箱")
+        contact_detail = "缺少" + "、".join(missing)
     checks.append(
         {
-            "item": "鑱旂郴鏂瑰紡瀹屾暣鎬?,
+            "item": "联系方式完整性",
             "status": contact_status,
             "detail": contact_detail,
         }
@@ -130,14 +133,14 @@ def pre_export_check(
     if unconfirmed:
         preview = ", ".join(unconfirmed[:3])
         suffix = "..." if len(unconfirmed) > 3 else ""
-        estimate_detail = f"鏈墈len(unconfirmed)}澶凙I浼扮畻鏁版嵁鏈‘璁わ細{preview}{suffix}"
+        estimate_detail = f"有{len(unconfirmed)}处AI估算数据未确认：{preview}{suffix}"
         estimate_status = "warn"
     else:
         estimate_detail = ""
         estimate_status = "pass"
     checks.append(
         {
-            "item": "AI浼扮畻鏁版嵁纭",
+            "item": "AI估算数据确认",
             "status": estimate_status,
             "detail": estimate_detail,
         }
@@ -146,13 +149,13 @@ def pre_export_check(
     char_count = sum(len(str(v)) for v in sections.values())
     if char_count >= 1500:
         length_status = "warn"
-        length_detail = f"绾char_count}瀛楋紝寤鸿鎺у埗鍦?00-1200瀛楋紙1椤礎4锛?
+        length_detail = f"约{char_count}字，建议控制在800-1200字（1页A4）"
     else:
         length_status = "pass"
-        length_detail = f"绾char_count}瀛楋紝闀垮害鍚堥€?
+        length_detail = f"约{char_count}字，长度合适"
     checks.append(
         {
-            "item": "绠€鍘嗛暱搴?,
+            "item": "简历长度",
             "status": length_status,
             "detail": length_detail,
         }
@@ -164,22 +167,22 @@ def pre_export_check(
     )
     checks.append(
         {
-            "item": "缁忓巻鎻忚堪",
+            "item": "经历描述",
             "status": "pass" if has_exp else "warn",
-            "detail": "" if has_exp else "宸ヤ綔缁忓巻鍜岄」鐩粡鍘嗛兘涓虹┖锛屽缓璁ˉ鍏?,
+            "detail": "" if has_exp else "工作经历和项目经历都为空，建议补充",
         }
     )
 
     optimized_count = sum(1 for v in section_status.values() if v == "optimized")
     if optimized_count >= 3:
         opt_status = "pass"
-        opt_detail = f"{optimized_count}/7鏉垮潡宸蹭紭鍖?
+        opt_detail = f"{optimized_count}/7板块已优化"
     else:
         opt_status = "info"
-        opt_detail = f"{optimized_count}/7鏉垮潡宸蹭紭鍖栵紝寤鸿鑷冲皯浼樺寲缁忓巻鐩稿叧鏉垮潡"
+        opt_detail = f"{optimized_count}/7板块已优化，建议至少优化经历相关板块"
     checks.append(
         {
-            "item": "浼樺寲杩涘害",
+            "item": "优化进度",
             "status": opt_status,
             "detail": opt_detail,
         }
@@ -249,22 +252,22 @@ def _typography_vars(char_count: int, template: str) -> dict[str, str]:
 def _extract_name(basic: str) -> str:
     text = basic.strip()
     if not text:
-        return "涓汉绠€鍘?
+        return "个人简历"
 
-    match = re.search(r"濮撳悕[锛?\s]*([^\s\n锛?|锝?]+)", text)
+    match = re.search(r"姓名[：:\s]*([^\s\n，,|｜/]+)", text)
     if match:
         return match.group(1).strip()
 
     first_line = text.split("\n")[0].strip()
-    first_line = re.sub(r"^(涓汉绠€鍘唡绠€鍘唡涓汉淇℃伅|涓汉璧勬枡)\s*", "", first_line)
+    first_line = re.sub(r"^(个人简历|简历|个人信息|个人资料)\s*", "", first_line)
     if first_line and len(first_line) <= 24:
-        inline_name = re.search(r"濮撳悕[锛?\s]*([^\s锛?|锝?]+)", first_line)
+        inline_name = re.search(r"姓名[：:\s]*([^\s，,|｜/]+)", first_line)
         if inline_name:
             return inline_name.group(1).strip()
-        if "锛? not in first_line and ":" not in first_line and "鎵嬫満" not in first_line:
+        if "：" not in first_line and ":" not in first_line and "手机" not in first_line:
             return first_line[:20]
 
-    return "涓汉绠€鍘?
+    return "个人简历"
 
 
 def _extract_contact_line(basic: str, name: str, separator: str = "  |  ") -> str:
@@ -272,11 +275,11 @@ def _extract_contact_line(basic: str, name: str, separator: str = "  |  ") -> st
     patterns = [
         (r"1[3-9]\d{9}", None),
         (r"[\w.\-+]+@[\w.\-]+\.\w+", None),
-        (r"闄㈡牎[锛?\s]*([^\n锛?|锝淽+)", 1),
-        (r"瀛︽牎[锛?\s]*([^\n锛?|锝淽+)", 1),
-        (r"涓撲笟[锛?\s]*([^\n锛?|锝淽+)", 1),
-        (r"瀛﹀巻[锛?\s]*([^\n锛?|锝淽+)", 1),
-        (r"骞撮緞[锛?\s]*([^\n锛?|锝淽+)", 1),
+        (r"院校[：:\s]*([^\n，,|｜]+)", 1),
+        (r"学校[：:\s]*([^\n，,|｜]+)", 1),
+        (r"专业[：:\s]*([^\n，,|｜]+)", 1),
+        (r"学历[：:\s]*([^\n，,|｜]+)", 1),
+        (r"年龄[：:\s]*([^\n，,|｜]+)", 1),
     ]
     seen: set[str] = set()
     for pattern, group in patterns:
@@ -294,7 +297,7 @@ def _extract_contact_line(basic: str, name: str, separator: str = "  |  ") -> st
         return separator.join(parts)
 
     lines = [ln.strip() for ln in basic.split("\n") if ln.strip()]
-    fallback = [ln for ln in lines if ln != name and "濮撳悕" not in ln][:3]
+    fallback = [ln for ln in lines if ln != name and "姓名" not in ln][:3]
     return separator.join(fallback)
 
 
@@ -302,7 +305,7 @@ def _format_estimate_html(number: str) -> str:
     return (
         f'<span style="border-bottom: 1px dashed #F57F17; padding-bottom: 1px;">'
         f"{html.escape(number)}"
-        f'<span style="font-size:7pt; color:#F57F17; vertical-align:super;">浼扮畻</span>'
+        f'<span style="font-size:7pt; color:#F57F17; vertical-align:super;">估算</span>'
         f"</span>"
     )
 
@@ -317,10 +320,10 @@ def _format_content(
         return ""
     escaped = html.escape(text)
     if include_star:
-        escaped = escaped.replace("銆怱銆?, '<span class="star-tag star-S">S</span>')
-        escaped = escaped.replace("銆怲銆?, '<span class="star-tag star-T">T</span>')
-        escaped = escaped.replace("銆怉銆?, '<span class="star-tag star-A">A</span>')
-        escaped = escaped.replace("銆怰銆?, '<span class="star-tag star-R">R</span>')
+        escaped = escaped.replace("【S】", '<span class="star-tag star-S">S</span>')
+        escaped = escaped.replace("【T】", '<span class="star-tag star-T">T</span>')
+        escaped = escaped.replace("【A】", '<span class="star-tag star-A">A</span>')
+        escaped = escaped.replace("【R】", '<span class="star-tag star-R">R</span>')
     if include_estimates:
         escaped = _ESTIMATE_PATTERN.sub(
             lambda m: _format_estimate_html(m.group(1)),
@@ -336,7 +339,7 @@ def _format_content_reportlab(
     include_estimates: bool = True,
     star_palette: dict[str, str] | None = None,
 ) -> str:
-    """ReportLab Paragraph 鍏煎 markup銆?""
+    """ReportLab Paragraph 兼容 markup。"""
     if not text:
         return ""
     palette = star_palette or {
@@ -349,14 +352,14 @@ def _format_content_reportlab(
     if include_star:
         for tag, color in palette.items():
             escaped = escaped.replace(
-                f"銆恵tag}銆?,
+                f"【{tag}】",
                 f'<font color="{color}"><b>{tag}</b></font>',
             )
     if include_estimates:
         escaped = _ESTIMATE_PATTERN.sub(
             lambda m: (
                 f'<u><font color="#F57F17"><b>{html.escape(m.group(1))}</b></font></u>'
-                f'<font color="#F57F17" size="7">浼扮畻</font>'
+                f'<font color="#F57F17" size="7">估算</font>'
             ),
             escaped,
         )
@@ -364,8 +367,8 @@ def _format_content_reportlab(
 
 
 def _strip_for_ats(text: str) -> str:
-    """ATS 妯℃澘锛氬幓闄?STAR 鏍囩涓?鈿狅笍 鏍囪銆?""
-    cleaned = re.sub(r"銆怺STAR]銆?, "", text)
+    """ATS 模板：去除 STAR 标签与 ⚠️ 标记。"""
+    cleaned = re.sub(r"【[STAR]】", "", text)
     cleaned = _ESTIMATE_PATTERN.sub(r"\1", cleaned)
     cleaned = re.sub(r"\n{3,}", "\n\n", cleaned)
     return cleaned.strip()
@@ -397,7 +400,7 @@ def _register_pdf_font() -> str:
 
 
 def _iter_content_sections(sections: dict[str, str]) -> list[tuple[str, str, str]]:
-    """杩斿洖 (key, title, content) 鍒楄〃锛岃烦杩?basic_info 涓庣┖鍐呭銆?""
+    """返回 (key, title, content) 列表，跳过 basic_info 与空内容。"""
     items: list[tuple[str, str, str]] = []
     for key in SECTION_ORDER_KEYS:
         if key == "basic_info":
@@ -414,7 +417,7 @@ def _header_context(sections: dict[str, str], filename: str, template: str) -> d
     basic = str(sections.get("basic_info", "") or "").strip()
     name = _extract_name(basic) if basic else filename
     if template == PDFExporter.TEMPLATE_MODERN:
-        contact_sep = " 路 "
+        contact_sep = " · "
     elif template == PDFExporter.TEMPLATE_ATS:
         contact_sep = " | "
     else:
@@ -424,7 +427,7 @@ def _header_context(sections: dict[str, str], filename: str, template: str) -> d
 
 
 class PDFExporter:
-    """灏嗗悇鏉垮潡鍐呭娓叉煋涓?A4 PDF銆?""
+    """将各板块内容渲染为 A4 PDF。"""
 
     TEMPLATE_CLASSIC = "classic"
     TEMPLATE_MODERN = "modern"
@@ -436,7 +439,7 @@ class PDFExporter:
         self,
         sections: dict[str, str],
         template: str = "classic",
-        filename: str = "绠€鍘?,
+        filename: str = "简历",
     ) -> bytes:
         template = template if template in self.VALID_TEMPLATES else self.TEMPLATE_CLASSIC
 
@@ -467,7 +470,7 @@ class PDFExporter:
         return self._render_html_classic(sections, filename=filename)
 
     def _render_html_classic(self, sections: dict[str, str], *, filename: str) -> str:
-        """Notion 缂栬緫椋庯細鏆栬壊椤舵爮銆佸眳涓帓鐗堛€佺帿鐟拌楗版潯銆佺矖鍒嗛殧绾裤€?""
+        """Notion 编辑风：暖色顶栏、居中排版、玫瑰装饰条、粗分隔线。"""
         char_count = sum(len(str(v)) for v in sections.values())
         typo = _typography_vars(char_count, self.TEMPLATE_CLASSIC)
         ctx = _header_context(sections, filename, self.TEMPLATE_CLASSIC)
@@ -577,7 +580,7 @@ body {{
 </html>"""
 
     def _render_html_modern(self, sections: dict[str, str], *, filename: str) -> str:
-        """Vercel 绉戞妧椋庯細宸︿晶娓愬彉绔栨潯銆佸乏瀵归綈銆佸ぇ鍐欑珷鑺傛爣绛俱€佺粏绾垮垎闅斻€?""
+        """Vercel 科技风：左侧渐变竖条、左对齐、大写章节标签、细线分隔。"""
         char_count = sum(len(str(v)) for v in sections.values())
         typo = _typography_vars(char_count, self.TEMPLATE_MODERN)
         ctx = _header_context(sections, filename, self.TEMPLATE_MODERN)
@@ -689,7 +692,7 @@ body {{
 </html>"""
 
     def _export_ats(self, sections: dict[str, str], filename: str) -> bytes:
-        """Ollama 鏂囨。椋庯細绾粦鐧姐€佹柟鎷彿绔犺妭鏍囩銆佺粨鏋勫寲绾枃鏈€?""
+        """Ollama 文档风：纯黑白、方括号章节标签、结构化纯文本。"""
         from reportlab.lib.colors import HexColor
         from reportlab.lib.pagesizes import A4
         from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
@@ -787,7 +790,7 @@ body {{
         *,
         template: str,
     ) -> bytes:
-        """WeasyPrint 涓嶅彲鐢ㄦ椂鐨勪笁妯℃澘闄嶇骇锛坈lassic / modern / ats 鍚勮嚜鐙珛甯冨眬锛夈€?""
+        """WeasyPrint 不可用时的三模板降级（classic / modern / ats 各自独立布局）。"""
         if template == self.TEMPLATE_ATS:
             return self._export_ats(sections, filename)
         if template == self.TEMPLATE_MODERN:
@@ -889,7 +892,7 @@ body {{
                 )
             )
             bar_title = (
-                f'<font color="{theme["accent_soft"]}">鈻?/font> '
+                f'<font color="{theme["accent_soft"]}">▎</font> '
                 f"{html.escape(title)}"
             )
             elements.append(Paragraph(bar_title, section_style))
@@ -1002,10 +1005,10 @@ body {{
                 )
             )
 
-        content_table = Table([[content_parts]], colWidths=[content_width], splitByRow=True)
+        content_table = Table([[content_parts]], colWidths=[content_width])
         content_table.setStyle(TableStyle([("LEFTPADDING", (0, 0), (-1, -1), 0)]))
 
-        rail_table = Table([[""]], colWidths=[rail_width], rowHeights=[230 * mm])
+        rail_table = Table([[""]], colWidths=[rail_width], rowHeights=[260 * mm])
         rail_table.setStyle(
             TableStyle(
                 [
@@ -1021,5 +1024,3 @@ body {{
 
         doc.build([shell])
         return buf.getvalue()
-
-

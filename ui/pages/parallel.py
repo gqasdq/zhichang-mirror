@@ -1,7 +1,10 @@
-﻿"""
-骞宠瀹囧畽锛堥暅璇€咃級椤甸潰銆?
-浜や簰娴佺▼锛?1) 鏋佺畝鍏ュ彛锛氫笂浼犵畝鍘?鎵嬪啓鐜扮姸 + 绾犵粨杈撳叆 + 鐓т竴鐓?2) 涓夋潯骞宠浜虹敓灞曠ず
-3) 浜斿紶缈荤墝杩介棶锛?-3鍏堥棶鍚庣瓟锛?鐩存帴灞曞紑A锛?鎸栨帢绗洓绉嶅彲鑳斤級
+"""
+平行宇宙（镜语者）页面。
+
+交互流程：
+1) 极简入口：上传简历/手写现状 + 纠结输入 + 照一照
+2) 三条平行人生展示
+3) 五张翻牌追问（1-3先问后答，4直接展开A，5挖掘第四种可能）
 """
 
 from __future__ import annotations
@@ -41,19 +44,19 @@ from ui.pages.parallel_universe import (
 logger = logging.getLogger(__name__)
 
 FLIP_CARDS = [
-    {"id": "card1", "image": "assets/cards/card_1_mirror.png", "title": "濡傛灉褰撳垵閫変簡鍙︿竴鏉¤矾", "subtitle": "浣犳渶閬楁喚鐨勯€夋嫨鏄粈涔?, "color": "#B8908A", "prompt_type": "regret"},
-    {"id": "card2", "image": "assets/cards/card_2_water.png", "title": "鏈€瀹虫€曠殑浜嬩細褰卞搷鍝潯璺?, "subtitle": "浣犵殑鎭愭儳鏉ヨ嚜鍝噷", "color": "#7B9E87", "prompt_type": "fear"},
-    {"id": "card3", "image": "assets/cards/card_3_candle.png", "title": "鍐呭績鏈€鎯冲仛鐨勮兘璧伴€氬悧", "subtitle": "浣犳渶鎯冲仛浣嗘病鏁㈠仛鐨勪簨", "color": "#8B7EB8", "prompt_type": "dream"},
-    {"id": "card4", "image": "assets/cards/card_4_steps.png", "title": "灞曞紑闀滈潰A鐨勫畬鏁?骞磋矾寰?, "subtitle": "娣辫€曞綋涓嬭繖鏉¤矾鎬庝箞璧?, "color": "#B8908A", "prompt_type": "expand"},
-    {"id": "card5", "image": "assets/cards/card_5_door.png", "title": "鏈夋病鏈夌鍥涚鍙兘", "subtitle": "璺冲嚭涓夐€変竴鐨勬鏋?, "color": "#7B9E87", "prompt_type": "fourth"},
+    {"id": "card1", "image": "assets/cards/card_1_mirror.png", "title": "如果当初选了另一条路", "subtitle": "你最遗憾的选择是什么", "color": "#B8908A", "prompt_type": "regret"},
+    {"id": "card2", "image": "assets/cards/card_2_water.png", "title": "最害怕的事会影响哪条路", "subtitle": "你的恐惧来自哪里", "color": "#7B9E87", "prompt_type": "fear"},
+    {"id": "card3", "image": "assets/cards/card_3_candle.png", "title": "内心最想做的能走通吗", "subtitle": "你最想做但没敢做的事", "color": "#8B7EB8", "prompt_type": "dream"},
+    {"id": "card4", "image": "assets/cards/card_4_steps.png", "title": "展开镜面A的完整5年路径", "subtitle": "深耕当下这条路怎么走", "color": "#B8908A", "prompt_type": "expand"},
+    {"id": "card5", "image": "assets/cards/card_5_door.png", "title": "有没有第四种可能", "subtitle": "跳出三选一的框架", "color": "#7B9E87", "prompt_type": "fourth"},
 ]
 
 _CARD_PLACEHOLDER_ICONS = {
-    "card1": "馃獮",
-    "card2": "馃挧",
-    "card3": "馃暞锔?,
-    "card4": "馃獪",
-    "card5": "馃毆",
+    "card1": "🪞",
+    "card2": "💧",
+    "card3": "🕯️",
+    "card4": "🪜",
+    "card5": "🚪",
 }
 
 _MUTED_LIGHT = "#8C8279"
@@ -63,7 +66,7 @@ def _inject_styles() -> None:
     st.markdown(
         """
 <style>
-/* 骞宠瀹囧畽 路 椤甸潰涓撳睘鏍峰紡 */
+/* 平行宇宙 · 页面专属样式 */
 .stApp {
   background: radial-gradient(circle at top, rgba(255, 248, 242, 0.75), #F7F3EF 42%);
 }
@@ -187,7 +190,7 @@ def _image_to_base64(image_path: str) -> str:
 
 
 def _card_visual_html(card: Dict[str, str], *, flipped: bool = False) -> str:
-    """缈荤墝姝ｉ潰锛氫紭鍏堟湰鍦版彃鍥撅紝缂哄け鏃剁敤涓婚鑹叉笎鍙樺崰浣嶏紙閬垮厤绌虹櫧鐮村浘锛夈€?""
+    """翻牌正面：优先本地插图，缺失时用主题色渐变占位（避免空白破图）。"""
     path = Path(card["image"])
     state_style = "opacity:0.45;filter:grayscale(40%);" if flipped else ""
     shell = (
@@ -203,7 +206,7 @@ def _card_visual_html(card: Dict[str, str], *, flipped: bool = False) -> str:
             'style="width:100%;height:200px;object-fit:cover;display:block;">'
             "</div>"
         )
-    icon = _CARD_PLACEHOLDER_ICONS.get(card["id"], "鉁?)
+    icon = _CARD_PLACEHOLDER_ICONS.get(card["id"], "✨")
     color = escape(card.get("color", "#B8908A"))
     return (
         f'<div class="flip-card-placeholder" style="{shell}">'
@@ -219,7 +222,7 @@ def _render_card_thumbnail(card_info: Dict[str, str]) -> None:
     if path.exists():
         st.image(str(path), width=80)
     else:
-        icon = _CARD_PLACEHOLDER_ICONS.get(card_info.get("id", ""), "鉁?)
+        icon = _CARD_PLACEHOLDER_ICONS.get(card_info.get("id", ""), "✨")
         st.markdown(
             f'<div style="font-size:36px;text-align:center;line-height:1.2;padding:8px 0;">{icon}</div>',
             unsafe_allow_html=True,
@@ -264,9 +267,7 @@ def _read_uploaded_resume(uploaded_file: Any) -> str:
 
     if suffix == "pdf":
         try:
-import warnings
-warnings.filterwarnings("ignore", category=UserWarning, module="pdfminer")
-            logging.getLogger("pdfminer.pdffont").setLevel(logging.ERROR)`nimport pdfplumber
+            import pdfplumber
 
             text_parts: List[str] = []
             with pdfplumber.open(io.BytesIO(raw_bytes)) as pdf:
@@ -289,7 +290,7 @@ warnings.filterwarnings("ignore", category=UserWarning, module="pdfminer")
             if merged:
                 return re.sub(r"(.)\1+", r"\1", merged)
         except Exception:
-            st.warning("PDF 瑙ｆ瀽澶辫触锛岃鐩存帴绮樿创绠€鍘嗘枃鏈€?)
+            st.warning("PDF 解析失败，请直接粘贴简历文本。")
         return ""
 
     if suffix in {"docx", "doc"}:
@@ -300,72 +301,72 @@ warnings.filterwarnings("ignore", category=UserWarning, module="pdfminer")
             lines = [para.text.strip() for para in document.paragraphs if para.text.strip()]
             return "\n".join(lines).strip()
         except Exception:
-            st.warning("DOCX 瑙ｆ瀽澶辫触锛岃鐩存帴绮樿创绠€鍘嗘枃鏈€?)
+            st.warning("DOCX 解析失败，请直接粘贴简历文本。")
             return ""
 
-    st.warning("鏆備笉鏀寔璇ユ枃浠舵牸寮忥紝璇蜂笂浼?txt / pdf / docx銆?)
+    st.warning("暂不支持该文件格式，请上传 txt / pdf / docx。")
     return ""
 
 
 def _render_entry() -> None:
-    render_page_header("骞宠瀹囧畽", "濡傛灉褰撳垵閫変簡鍙︿竴鏉¤矾锛屼細鎬庢牱锛熼暅璇€呭府浣犵湅瑙併€屽鏋溿€嶇殑鍙兘")
+    render_page_header("平行宇宙", "如果当初选了另一条路，会怎样？镜语者帮你看见「如果」的可能")
 
     col_a, col_b = st.columns(2)
     with col_a:
-        if st.button("涓婁紶绠€鍘?, use_container_width=True):
+        if st.button("上传简历", use_container_width=True):
             st.session_state.parallel_resume_mode = "upload"
     with col_b:
-        if st.button("鎵嬪啓鐜扮姸", use_container_width=True):
+        if st.button("手写现状", use_container_width=True):
             st.session_state.parallel_resume_mode = "manual"
 
     st.markdown('<div class="entry-box">', unsafe_allow_html=True)
     if st.session_state.parallel_resume_mode == "upload":
         uploaded = st.file_uploader(
-            "鍙笂浼?txt/pdf/docx锛堝彲閫夛級",
+            "可上传 txt/pdf/docx（可选）",
             type=["txt", "pdf", "docx", "doc"],
             label_visibility="visible",
         )
         if uploaded is not None:
             content = _read_uploaded_resume(uploaded)
             if not content.strip():
-                content = f"[涓婁紶鏂囦欢] {uploaded.name}"
+                content = f"[上传文件] {uploaded.name}"
             st.session_state.parallel_resume_text = content
             st.session_state.parallel_parsed = parse_resume(content)
-            if content.startswith("[涓婁紶鏂囦欢]"):
-                st.caption("宸茶褰曟枃浠跺悕锛屾湭鑳芥彁鍙栨鏂囷紝寤鸿鏀圭敤鎵嬪啓鐜扮姸鎴?txt銆?)
+            if content.startswith("[上传文件]"):
+                st.caption("已记录文件名，未能提取正文，建议改用手写现状或 txt。")
             else:
-                st.caption("宸茶鍙栫畝鍘嗗唴瀹广€?)
+                st.caption("已读取简历内容。")
 
     if st.session_state.parallel_resume_mode == "manual":
         text = st.text_area(
-            "浣犵殑鐜扮姸",
+            "你的现状",
             value=st.session_state.parallel_resume_text,
-            placeholder="鍐欎笅浣犵殑缁忓巻銆佹妧鑳姐€佺幇宀椾綅銆佹兂娉曪紙鍙€夛級",
+            placeholder="写下你的经历、技能、现岗位、想法（可选）",
             height=100,
         )
         st.session_state.parallel_resume_text = text
         st.session_state.parallel_parsed = parse_resume(text)
 
     worry = st.text_area(
-        "浣犵幇鍦ㄦ渶绾犵粨鐨勪簨",
+        "你现在最纠结的事",
         value=st.session_state.parallel_worry,
-        placeholder="姣斿锛氳涓嶈杞銆佽鐣欏湪鏉窞杩樻槸鍥炴垚閮姐€佽涓嶈鑰冨叕...",
+        placeholder="比如：要不要转行、该留在杭州还是回成都、该不该考公...",
         height=90,
     )
     st.session_state.parallel_worry = worry
     st.markdown("</div>", unsafe_allow_html=True)
 
-    if st.button("鐓т竴鐓?, type="primary", use_container_width=True):
+    if st.button("照一照", type="primary", use_container_width=True):
         _on_generate()
 
     st.markdown("---")
 
-    render_section_title("澶у閮藉湪绾犵粨浠€涔?)
+    render_section_title("大家都在纠结什么")
     cols = st.columns(3)
     scenarios = [
-        ("瑕佷笉瑕佽€冨叕", "绋冲畾浣嗕笉鐢樺績锛岀籂缁撹涓嶈璧屼竴鎶婁綋鍒跺"),
-        ("鐣欏湪涓€绾胯繕鏄洖鑰佸", "澶у煄甯傛満浼氬浣嗗帇鍔涘ぇ锛岃€佸瀹夌ǔ浣嗛€夋嫨灏?),
-        ("杞杩樻槸鍧氭寔", "鐜板湪杩欐潯璺秺璧拌秺绐勶紝浣嗚浆琛屽張鎬曚粠闆跺紑濮?),
+        ("要不要考公", "稳定但不甘心，纠结要不要赌一把体制外"),
+        ("留在一线还是回老家", "大城市机会多但压力大，老家安稳但选择少"),
+        ("转行还是坚持", "现在这条路越走越窄，但转行又怕从零开始"),
     ]
     for i, (title, desc) in enumerate(scenarios):
         with cols[i]:
@@ -381,7 +382,7 @@ def _render_entry() -> None:
     st.markdown(
         f"""
 <div style="background-color:#F0EBE3; border-radius:8px; padding:12px 16px;">
-    <span style="color:{_MUTED_LIGHT}; font-size:13px;">闀滆鑰呬細鍩轰簬浣犵殑鐜扮姸锛屾帹婕斾笉鍚岄€夋嫨鐨勫彲鑳芥€р€斺€斾笉鏄浛浣犲喅瀹氾紝鏄府浣犵湅瑙併€?/span>
+    <span style="color:{_MUTED_LIGHT}; font-size:13px;">镜语者会基于你的现状，推演不同选择的可能性——不是替你决定，是帮你看见。</span>
 </div>
 """,
         unsafe_allow_html=True,
@@ -391,7 +392,7 @@ def _render_entry() -> None:
 def _on_generate() -> None:
     worry = st.session_state.parallel_worry.strip()
     if not worry:
-        st.warning("鍏堝憡璇夐暅璇€呬綘鍦ㄧ籂缁撲粈涔堛€?)
+        st.warning("先告诉镜语者你在纠结什么。")
         return
 
     parsed = st.session_state.parallel_parsed or {}
@@ -404,13 +405,13 @@ def _on_generate() -> None:
     )
     engine = get_engine()
     try:
-        with st.status("馃 闀滆鑰呮鍦ㄦ帹婕?..", expanded=True) as status:
-            st.write("鐞嗚В浣犵殑绾犵粨涓庣幇鐘垛€?)
-            st.write("鎺ㄦ紨璺緞 A / B / C鈥?)
+        with st.status("🧠 镜语者正在推演...", expanded=True) as status:
+            st.write("理解你的纠结与现状…")
+            st.write("推演路径 A / B / C…")
             result = engine.generate(profile)
-            status.update(label="鎺ㄦ紨瀹屾垚", state="complete", expanded=False)
+            status.update(label="推演完成", state="complete", expanded=False)
         if result is None:
-            raise ValueError("鎺ㄦ紨鏈繑鍥炵粨鏋滐紝璇风◢鍚庨噸璇?)
+            raise ValueError("推演未返回结果，请稍后重试")
         result_dict = result.to_dict()
     except ValueError as e:
         from ui.error_handler import handle_api_error
@@ -419,13 +420,13 @@ def _on_generate() -> None:
         err_text = str(e)
         st.caption(err_text)
         if "DEEPSEEK" in err_text or "API" in err_text.upper():
-            st.caption("璇锋鏌?.env 涓殑 DEEPSEEK_API_KEY 鏄惁閰嶇疆姝ｇ‘銆?)
+            st.caption("请检查 .env 中的 DEEPSEEK_API_KEY 是否配置正确。")
         return
     except Exception as e:
         from ui.error_handler import handle_api_error
 
         handle_api_error(e, context="parallel")
-        st.caption(f"鎶€鏈鎯咃細{type(e).__name__}: {e}")
+        st.caption(f"技术详情：{type(e).__name__}: {e}")
         logger.exception("parallel generate failed")
         return
 
@@ -484,33 +485,33 @@ def _render_mirror_result() -> None:
 
     insight = escape(result.get("insight", "")).replace("\n", "<br>")
     if insight:
-        st.markdown(f'<div class="insight"><strong>闀滆鑰呰锛?/strong>{insight}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="insight"><strong>镜语者说：</strong>{insight}</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="mirror-wrap">', unsafe_allow_html=True)
     for key, label, color in [
-        ("mirror_a", "闀滈潰A锛氭繁鑰曞綋涓?, "#B8908A"),
-        ("mirror_b", "闀滈潰B锛氭嫄寮箣璺?, "#7B9E87"),
-        ("mirror_c", "闀滈潰C锛氭剰澶栧彲鑳?, "#8B7EB8"),
+        ("mirror_a", "镜面A：深耕当下", "#B8908A"),
+        ("mirror_b", "镜面B：拐弯之路", "#7B9E87"),
+        ("mirror_c", "镜面C：意外可能", "#8B7EB8"),
     ]:
         mirror = result.get(key, {})
         turning_html = ""
         for item in mirror.get("turning_points", [])[:4]:
             year = escape(str(item.get("year", "")))
             event = escape(str(item.get("event", "")))
-            turning_html += f"<li>{year}锛歿event}</li>"
+            turning_html += f"<li>{year}：{event}</li>"
         risks_html = "".join(f"<li>{escape(str(risk))}</li>" for risk in mirror.get("risks", [])[:4])
         body = f"""
 <div class="mirror-card">
-  <div class="mirror-header" style="background:{color};">{label} 路 {escape(str(mirror.get("title", "")))}</div>
+  <div class="mirror-header" style="background:{color};">{label} · {escape(str(mirror.get("title", "")))}</div>
   <div class="mirror-body">
     <div style="color:#7C6B63;">{escape(str(mirror.get("summary", "")))}</div>
-    <p><strong>5骞村悗锛?/strong>{escape(str(mirror.get("year5", {}).get("position", "淇℃伅涓嶈冻")))} 路 {escape(str(mirror.get("year5", {}).get("salary", "淇℃伅涓嶈冻")))}</p>
+    <p><strong>5年后：</strong>{escape(str(mirror.get("year5", {}).get("position", "信息不足")))} · {escape(str(mirror.get("year5", {}).get("salary", "信息不足")))}</p>
     <p>{escape(str(mirror.get("year5", {}).get("description", "")))}</p>
-    <p><strong>10骞村悗锛?/strong>{escape(str(mirror.get("year10", {}).get("position", "淇℃伅涓嶈冻")))} 路 {escape(str(mirror.get("year10", {}).get("salary", "淇℃伅涓嶈冻")))}</p>
+    <p><strong>10年后：</strong>{escape(str(mirror.get("year10", {}).get("position", "信息不足")))} · {escape(str(mirror.get("year10", {}).get("salary", "信息不足")))}</p>
     <p>{escape(str(mirror.get("year10", {}).get("description", "")))}</p>
-    <p><strong>鍏抽敭杞姌锛?/strong></p><ul>{turning_html}</ul>
-    <p><strong>椋庨櫓鎻愮ず锛?/strong></p><ul>{risks_html}</ul>
-    <p style="font-size:12px;color:#8A7A71;">{escape(str(mirror.get("data_source", "鍩轰簬琛屼笟鏁版嵁涓庢斂绛栨帹婕?)))}</p>
+    <p><strong>关键转折：</strong></p><ul>{turning_html}</ul>
+    <p><strong>风险提示：</strong></p><ul>{risks_html}</ul>
+    <p style="font-size:12px;color:#8A7A71;">{escape(str(mirror.get("data_source", "基于行业数据与政策推演")))}</p>
   </div>
 </div>
 """
@@ -525,7 +526,7 @@ def _render_mirror_result() -> None:
 
     col_bridge, _ = st.columns([1, 2])
     with col_bridge:
-        if st.button("馃К 鐢ㄦ璺緞鍋氳亴涓氬熀鍥犳祴搴?, key="parallel_to_gene", use_container_width=True):
+        if st.button("🧬 用此路径做职业基因测序", key="parallel_to_gene", use_container_width=True):
             bridge_parallel_to_gene(result)
             from ui.sidebar import navigate_to_page
             navigate_to_page("gene")
@@ -537,9 +538,9 @@ def _render_mirror_result() -> None:
         try:
             pdf_bytes = export_parallel_report_pdf(parallel_report_text)
             st.download_button(
-                label="馃摜 涓嬭浇鎺ㄦ紨鎶ュ憡 (PDF)",
+                label="📥 下载推演报告 (PDF)",
                 data=pdf_bytes,
-                file_name="鑱屽満闀滃瓙-骞宠瀹囧畽鎶ュ憡.pdf",
+                file_name="职场镜子-平行宇宙报告.pdf",
                 mime="application/pdf",
                 key="parallel_download_pdf",
                 use_container_width=True,
@@ -551,7 +552,7 @@ def _render_mirror_result() -> None:
 
 
 def _render_flip_cards() -> None:
-    st.markdown('<div class="flip-label">缈荤墝杩介棶锛堝叡5寮狅級</div>', unsafe_allow_html=True)
+    st.markdown('<div class="flip-label">翻牌追问（共5张）</div>', unsafe_allow_html=True)
     cols = st.columns(5)
     for index, card in enumerate(FLIP_CARDS):
         with cols[index]:
@@ -568,11 +569,11 @@ def _render_flip_cards() -> None:
                 unsafe_allow_html=True,
             )
             if not is_flipped:
-                if st.button("缈诲紑", key=f"flip_{card['id']}", use_container_width=True):
+                if st.button("翻开", key=f"flip_{card['id']}", use_container_width=True):
                     _on_flip(card)
             else:
                 st.markdown(
-                    '<div style="text-align:center;font-size:12px;color:#9E8E83;padding:6px 0;">鉁?宸叉帰绱?/div>',
+                    '<div style="text-align:center;font-size:12px;color:#9E8E83;padding:6px 0;">✓ 已探索</div>',
                     unsafe_allow_html=True,
                 )
 
@@ -583,16 +584,16 @@ def _render_flip_cards() -> None:
             f'<div class="flip-result" style="border-left-color:{card["color"]};"><strong>{escape(card["title"])}</strong><br>{escape(pending["question"])}</div>',
             unsafe_allow_html=True,
         )
-        answer = st.text_input("浣犵殑鍥炵瓟", key=f"answer_{card['id']}", placeholder="鍐欎笅浣犵殑鐪熷疄鎯虫硶...")
+        answer = st.text_input("你的回答", key=f"answer_{card['id']}", placeholder="写下你的真实想法...")
         action_l, action_r = st.columns([1, 1])
         with action_l:
-            if st.button("璺宠繃杩欏紶鐗?, key=f"skip_{card['id']}", use_container_width=True):
-                _save_flip_result(card, "浣犻€夋嫨浜嗗厛璺宠繃杩欏紶鐗岋紝绛変綘鍑嗗濂藉啀缁х画銆?, "")
+            if st.button("跳过这张牌", key=f"skip_{card['id']}", use_container_width=True):
+                _save_flip_result(card, "你选择了先跳过这张牌，等你准备好再继续。", "")
                 st.session_state.parallel_pending_question = None
         with action_r:
-            if st.button("鎻愪氦鍥炵瓟", key=f"submit_{card['id']}", use_container_width=True):
+            if st.button("提交回答", key=f"submit_{card['id']}", use_container_width=True):
                 if not answer.strip():
-                    st.warning("鍏堝啓涓€鍙ヤ綘鐨勬兂娉曘€?)
+                    st.warning("先写一句你的想法。")
                 else:
                     _on_flip_answer(card, answer.strip())
 
@@ -629,7 +630,7 @@ def _on_flip(card: Dict[str, str]) -> None:
     prompt_type = card["prompt_type"]
     if prompt_type == "expand":
         try:
-            with st.spinner("闀滆鑰呮鍦ㄨ杩颁綘鐨?骞存晠浜?.."):
+            with st.spinner("镜语者正在讲述你的5年故事..."):
                 start_branch_story(card["id"], _story_context_builder)
         except Exception as e:
             from ui.error_handler import handle_api_error
@@ -711,7 +712,7 @@ def _on_flip_answer(card: Dict[str, str], answer: str) -> None:
 def _save_flip_result(card: Dict[str, str], result: str, answer: str) -> None:
     safe_result = str(result or "").strip()
     if not safe_result:
-        safe_result = "鎴戜竴鏃舵病鍥炰笂鏉ワ紝鑳藉啀璇翠竴閬嶅悧锛?
+        safe_result = "我一时没回上来，能再说一遍吗？"
     st.session_state.parallel_flip_results.append(
         {
             "card_id": card["id"],
@@ -727,12 +728,12 @@ def _build_user_revealed_info() -> str:
     chunks: List[str] = []
     worry = st.session_state.parallel_worry
     if worry:
-        chunks.append(f"绾犵粨锛歿worry}")
+        chunks.append(f"纠结：{worry}")
     for item in st.session_state.parallel_flip_results:
-        chunks.append(f"銆恵item['title']}銆?)
+        chunks.append(f"【{item['title']}】")
         if item.get("answer"):
-            chunks.append(f"鐢ㄦ埛鍥炵瓟锛歿item['answer']}")
-        chunks.append(f"娲炲療锛歿item['result']}")
+            chunks.append(f"用户回答：{item['answer']}")
+        chunks.append(f"洞察：{item['result']}")
     return "\n".join(chunks).strip()
 
 
@@ -743,7 +744,7 @@ def _get_mirror_titles() -> str:
         mirror = result.get(f"mirror_{key}", {})
         if isinstance(mirror, dict) and mirror.get("title"):
             titles.append(str(mirror["title"]))
-    return "銆?.join(titles) if titles else "鏈煡"
+    return "、".join(titles) if titles else "未知"
 
 
 def _get_mirror_a_meta() -> tuple[str, str]:
@@ -760,22 +761,22 @@ def _mirror_a_brief() -> str:
     if not isinstance(mirror_a, dict):
         return ""
     year5 = mirror_a.get("year5", {}) if isinstance(mirror_a.get("year5", {}), dict) else {}
-    return "锛?.join(
+    return "；".join(
         [
             str(mirror_a.get("title", "")),
             str(mirror_a.get("summary", "")),
             str(year5.get("position", "")),
             str(year5.get("salary", "")),
         ]
-    ).strip("锛?)
+    ).strip("；")
 
 
 def _render_history() -> None:
     history = st.session_state.parallel_history
     if not history:
         return
-    with st.expander("鍘嗗彶鎺ㄦ紨璁板綍", expanded=False):
-        if st.button("娓呯┖璁板綍", use_container_width=False):
+    with st.expander("历史推演记录", expanded=False):
+        if st.button("清空记录", use_container_width=False):
             st.session_state.parallel_history = []
             HistoryManager().save([])
         for item in reversed(history[-10:]):
@@ -796,23 +797,22 @@ def _reset_page_state() -> None:
 
 
 def render() -> None:
-    track_module_enter("骞宠瀹囧畽")
+    track_module_enter("平行宇宙")
     _inject_styles()
     _init_state()
 
     if st.session_state.parallel_result is None:
         _render_entry()
     else:
-        render_page_header("骞宠瀹囧畽", "浣犵殑骞宠浜虹敓闀滃儚")
+        render_page_header("平行宇宙", "你的平行人生镜像")
         _render_mirror_result()
         render_smart_nav(get_parallel_universe_nav_recommendations())
-        if st.button("閲嶆柊寮€濮?, use_container_width=False):
+        if st.button("重新开始", use_container_width=False):
             _reset_page_state()
 
     _render_history()
 
 
 if __name__ == "__main__":
-    st.set_page_config(page_title="骞宠瀹囧畽", page_icon="馃獮", layout="wide")
+    st.set_page_config(page_title="平行宇宙", page_icon="🪞", layout="wide")
     render()
-
