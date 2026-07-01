@@ -1248,16 +1248,18 @@ def _render_resume_input_area() -> None:
     if uploaded_file and st.session_state.get("workshop_upload_name") != uploaded_file.name:
         with st.spinner("正在解析 PDF…"):
             try:
-                import pdfplumber
+                from utils.pdf_text import extract_text_from_pdf_bytes
 
-                pdf_bytes = io.BytesIO(uploaded_file.read())
-                with pdfplumber.open(pdf_bytes) as pdf:
-                    resume_text = "\n".join(page.extract_text() or "" for page in pdf.pages)
-                st.session_state.workshop_upload_name = uploaded_file.name
-                st.session_state.workshop_resume_input = resume_text
-                st.session_state.workshop_resume_text = resume_text.strip()
+                resume_text = extract_text_from_pdf_bytes(uploaded_file.getvalue())
+                if resume_text.strip():
+                    st.session_state.workshop_upload_name = uploaded_file.name
+                    st.session_state.workshop_resume_input = resume_text
+                    st.session_state.workshop_resume_text = resume_text.strip()
+                    st.rerun()
+                else:
+                    st.warning("未能从 PDF 中提取文字，请换一份文件或直接粘贴简历内容。")
             except ModuleNotFoundError:
-                st.error("PDF 解析依赖未安装：请执行 `python -m pip install pdfplumber` 后重试。")
+                st.error("PDF 解析依赖未安装：请执行 `python -m pip install pypdf pdfplumber` 后重试。")
             except Exception as exc:
                 st.error(f"PDF 解析失败：{exc}")
 
